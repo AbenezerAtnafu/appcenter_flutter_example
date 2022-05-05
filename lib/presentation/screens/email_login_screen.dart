@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_job_one/presentation/router/routes.dart';
 import 'package:flutter_job_one/utils/constants.dart';
 import 'package:flutter_job_one/utils/widgets_functions.dart';
@@ -18,8 +15,8 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final ThemeData themeData = Theme.of(context);
-    final double padding = 25.0;
-    final sidePadding = EdgeInsets.symmetric(horizontal: padding);
+    const double padding = 25.0;
+    const sidePadding = EdgeInsets.symmetric(horizontal: padding);
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -34,7 +31,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                 addVerticalSpace(padding),
                 RichText(
                   text: TextSpan(
-                    text: 'Let\'s',
+                    text: "Let's",
                     style: themeData.textTheme.headline4!.copyWith(
                       color: COLOR_SECONDARY,
                     ),
@@ -56,8 +53,8 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                     color: COLOR_SECONDARY,
                   ),
                 ),
-                addVerticalSpace(padding * 2),
-                TextFieldContainer(
+                addVerticalSpace(padding * 1.5),
+                const TextFieldContainer(
                   child: TextField(
                     decoration: InputDecoration(
                       icon: Icon(
@@ -70,7 +67,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                   ),
                 ),
                 addVerticalSpace(padding / 2),
-                TextFieldContainer(
+                const TextFieldContainer(
                   child: TextField(
                     obscureText: true,
                     decoration: InputDecoration(
@@ -87,7 +84,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                     ),
                   ),
                 ),
-                addVerticalSpace(6),
+                addVerticalSpace(4),
                 TextButton(
                   onPressed: () {},
                   child: Text(
@@ -99,38 +96,35 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                   ),
                 ),
                 addVerticalSpace(10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(size.width * 0.75, 50),
-                        primary: COLOR_PRIMARY,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
+                Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(size.width * 0.75, 50),
+                      primary: COLOR_PRIMARY,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                      onPressed: () {
-                        Navigator.pushNamed(context, navRoute);
-                      },
-                      child: Text('Sign in'),
                     ),
-                  ],
+                    onPressed: () {
+                      Navigator.pushNamed(context, navRoute);
+                    },
+                    child: const Text('Sign in'),
+                  ),
                 ),
-                addVerticalSpace(padding * 2.75),
+                addVerticalSpace(padding),
                 addHorizontalDividerWithText('OR'),
-                addVerticalSpace(padding * 2),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    InkWell(
+                Expanded(
+                  child: Center(
+                    child: InkWell(
                       onTap: () {
                         Navigator.pushNamed(context, phoneNumberLoginRoute);
                       },
                       child: RichText(
                         text: TextSpan(
                           text: 'Use',
-                          style: themeData.textTheme.bodyText2,
+                          style: themeData.textTheme.bodyText2!.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                           children: <TextSpan>[
                             TextSpan(
                               text: ' Phone Number',
@@ -143,10 +137,11 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                         ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
                 addVerticalSpace(10),
                 Expanded(
+                  flex: 2,
                   child: Center(
                     child: InkWell(
                       onTap: () {
@@ -154,7 +149,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                       },
                       child: RichText(
                         text: TextSpan(
-                          text: 'Don\'t have an account?',
+                          text: "Don't have an account?",
                           style: themeData.textTheme.bodyText2,
                           children: <TextSpan>[
                             TextSpan(
@@ -190,9 +185,9 @@ class TextFieldContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       width: size.width * 0.8,
       decoration: BoxDecoration(
         color: color ?? COLOR_GREY.withAlpha(40),

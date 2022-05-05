@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_job_one/presentation/router/routes.dart';
-import 'package:flutter_job_one/presentation/screens/EmailLoginScreen.dart';
 import 'package:flutter_job_one/utils/constants.dart';
 import 'package:flutter_job_one/utils/widgets_functions.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+class PhoneNumberSignupScreen extends StatefulWidget {
+  const PhoneNumberSignupScreen({Key? key}) : super(key: key);
 
   @override
-  _RegisterScreenState createState() => _RegisterScreenState();
+  _PhoneNumberSignupScreenState createState() =>
+      _PhoneNumberSignupScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _PhoneNumberSignupScreenState extends State<PhoneNumberSignupScreen> {
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
   final TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final ThemeData themeData = Theme.of(context);
-    final double padding = 25.0;
-    final sidePadding = EdgeInsets.symmetric(horizontal: padding);
+    const double padding = 25.0;
+    const sidePadding = EdgeInsets.symmetric(horizontal: padding);
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -43,7 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     width: 60,
                     height: 60,
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_back_ios_new_rounded,
                       color: COLOR_BLACK,
                     ),
@@ -52,7 +52,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 addVerticalSpace(padding * 2),
                 RichText(
                   text: TextSpan(
-                    text: 'Create your',
+                    text: "Create your",
                     style: themeData.textTheme.headline4!.copyWith(
                       color: COLOR_SECONDARY,
                     ),
@@ -74,67 +74,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     color: COLOR_SECONDARY,
                   ),
                 ),
-                addVerticalSpace(padding * 2),
-                TextFieldContainer(
-                  child: TextField(
+                addVerticalSpace(padding),
+                Form(
+                  key: formkey,
+                  child: IntlPhoneField(
+                    controller: controller,
+                    flagsButtonPadding: const EdgeInsets.only(left: 10),
+                    dropdownIconPosition: IconPosition.trailing,
                     decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.email_outlined,
-                        color: COLOR_SECONDARY,
-                      ),
-                      hintText: 'Full name',
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-                addVerticalSpace(padding / 2),
-                TextFieldContainer(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.email_outlined,
-                        color: COLOR_SECONDARY,
-                      ),
-                      hintText: 'Email',
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-                addVerticalSpace(padding / 2),
-                TextFieldContainer(
-                  child: TextField(
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.lock_outline_rounded,
-                        color: COLOR_SECONDARY,
-                      ),
-                      hintText: 'Password',
-                      border: InputBorder.none,
-                      suffixIcon: Icon(
-                        Icons.visibility,
-                        color: COLOR_SECONDARY,
-                      ),
-                    ),
-                  ),
-                ),
-                addVerticalSpace(10),
-                RichText(
-                  text: TextSpan(
-                    text: 'By creating an account you have agreed to our',
-                    style: themeData.textTheme.bodyText1,
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: ' Terms of service',
-                        style: themeData.textTheme.bodyText1!.copyWith(
-                          color: COLOR_PRIMARY,
-                          fontWeight: FontWeight.bold,
+                      hintText: 'Mobile Number',
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(
+                          color: COLOR_GREY.withAlpha(80),
+                          width: 0.0,
                         ),
                       ),
-                    ],
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: const BorderSide(
+                          color: COLOR_PRIMARY,
+                        ),
+                      ),
+                    ),
+                    initialCountryCode: 'ET',
+                    onChanged: (phone) {
+                      debugPrint(phone.completeNumber);
+                    },
                   ),
                 ),
-                addVerticalSpace(padding),
+                addVerticalSpace(padding / 2),
+                Text(
+                  'You will receive an SMS verification that may apply message and data rates',
+                  style: themeData.textTheme.bodyText2!.copyWith(
+                    color: COLOR_GREY,
+                  ),
+                ),
+                addVerticalSpace(padding * 2),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -147,11 +123,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.pushNamed(context, navRoute);
+                        Navigator.pushNamed(context, otpInputRoute);
                       },
-                      child: Text('Register'),
+                      child: const Text('Send code'),
                     ),
                   ],
+                ),
+                addVerticalSpace(padding),
+                addHorizontalDividerWithText('OR'),
+                Expanded(
+                  child: Center(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, registerRoute);
+                      },
+                      child: RichText(
+                        text: TextSpan(
+                          text: 'Use',
+                          style: themeData.textTheme.bodyText2!.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: ' Email',
+                              style: themeData.textTheme.bodyText2!.copyWith(
+                                color: COLOR_PRIMARY,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

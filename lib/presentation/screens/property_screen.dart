@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_job_one/presentation/router/routes.dart';
-import 'package:flutter_job_one/presentation/screens/EmailLoginScreen.dart';
 import 'package:flutter_job_one/sample_data.dart';
 import 'package:flutter_job_one/utils/constants.dart';
 import 'package:flutter_job_one/utils/custom_functions.dart';
@@ -21,17 +20,17 @@ class _PropertyScreenState extends State<PropertyScreen>
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final ThemeData themeData = Theme.of(context);
-    final double padding = 25.0;
-    final sidePadding = EdgeInsets.symmetric(horizontal: padding);
+    const double padding = 25.0;
+    const sidePadding = EdgeInsets.symmetric(horizontal: padding);
 
-    TabController _tabController = TabController(length: 3, vsync: this);
+    final TabController _tabController = TabController(length: 3, vsync: this);
 
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            width: size.width,
-            height: size.height,
+        body: SizedBox(
+          width: size.width,
+          height: size.height,
+          child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -52,7 +51,7 @@ class _PropertyScreenState extends State<PropertyScreen>
                           ),
                           width: 60,
                           height: 60,
-                          child: Icon(
+                          child: const Icon(
                             Icons.arrow_back_ios_new_rounded,
                             color: COLOR_BLACK,
                           ),
@@ -83,7 +82,7 @@ class _PropertyScreenState extends State<PropertyScreen>
                 addVerticalSpace(padding * 2),
                 Container(
                   margin: sidePadding,
-                  padding: EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(10.0),
                   height: 70,
                   decoration: BoxDecoration(
                     color: COLOR_GREY.withAlpha(40),
@@ -97,7 +96,7 @@ class _PropertyScreenState extends State<PropertyScreen>
                       borderRadius: BorderRadius.circular(50),
                       color: COLOR_WHITE,
                     ),
-                    tabs: [
+                    tabs: const [
                       Tab(child: Text('Active')),
                       Tab(child: Text('In Review')),
                       Tab(child: Text('Draft')),
@@ -105,14 +104,14 @@ class _PropertyScreenState extends State<PropertyScreen>
                   ),
                 ),
                 addVerticalSpace(padding / 2),
-                Padding(
+                const Padding(
                   padding: sidePadding,
                   child: Text('1 listing'),
                 ),
                 Container(
                   width: double.maxFinite,
                   height: 400,
-                  margin: EdgeInsets.symmetric(
+                  margin: const EdgeInsets.symmetric(
                     horizontal: padding,
                     vertical: 10,
                   ),
@@ -121,7 +120,7 @@ class _PropertyScreenState extends State<PropertyScreen>
                     children: [
                       Expanded(
                         child: ListView.builder(
-                          physics: BouncingScrollPhysics(),
+                          physics: const BouncingScrollPhysics(),
                           itemCount: RE_DATA.length,
                           itemBuilder: (BuildContext context, int index) =>
                               RealEstateItem(
@@ -130,9 +129,9 @@ class _PropertyScreenState extends State<PropertyScreen>
                         ),
                       ),
                       Expanded(
-                        child: FAVOURITE_DATA.length != 0
+                        child: FAVOURITE_DATA.isNotEmpty
                             ? ListView.builder(
-                                physics: BouncingScrollPhysics(),
+                                physics: const BouncingScrollPhysics(),
                                 itemCount: FAVOURITE_DATA.length,
                                 itemBuilder:
                                     (BuildContext context, int index) =>
@@ -145,7 +144,7 @@ class _PropertyScreenState extends State<PropertyScreen>
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Container(
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         shape: BoxShape.circle,
                                         boxShadow: [
                                           BoxShadow(
@@ -155,7 +154,7 @@ class _PropertyScreenState extends State<PropertyScreen>
                                           )
                                         ],
                                       ),
-                                      child: CircleAvatar(
+                                      child: const CircleAvatar(
                                         radius: 30.0,
                                         backgroundColor: COLOR_PRIMARY,
                                         child: Icon(
@@ -239,20 +238,20 @@ class RealEstateItem extends StatelessWidget {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10),
                   ),
-                  child: Image.asset(itemData['image']),
+                  child: Image.asset(itemData['image'] as String),
                 ),
                 Positioned(
                   top: 6,
                   right: 6,
                   child: InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, addListingRoute);
+                      Navigator.pushNamed(context, editPropertyRoute);
                     },
-                    child: CircleAvatar(
+                    child: const CircleAvatar(
                       maxRadius: 20,
                       backgroundColor: COLOR_PRIMARY,
                       child: Icon(
@@ -269,7 +268,7 @@ class RealEstateItem extends StatelessWidget {
               padding: const EdgeInsets.only(left: 10, bottom: 10),
               decoration: BoxDecoration(
                 border: Border.all(),
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(10),
                   bottomRight: Radius.circular(10),
                 ),
@@ -279,7 +278,7 @@ class RealEstateItem extends StatelessWidget {
                 children: [
                   addVerticalSpace(15.0),
                   Text(
-                    '${formatCurrency(itemData["amount"])}',
+                    formatCurrency(itemData["amount"] as int),
                     style: themeData.textTheme.headline6,
                   ),
                   addHorizontalSpace(10),

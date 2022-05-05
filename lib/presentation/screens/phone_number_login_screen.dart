@@ -4,23 +4,22 @@ import 'package:flutter_job_one/utils/constants.dart';
 import 'package:flutter_job_one/utils/widgets_functions.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
-class PhoneNumberSignUpScreen extends StatefulWidget {
-  const PhoneNumberSignUpScreen({Key? key}) : super(key: key);
+class PhoneNumberLoginScreen extends StatefulWidget {
+  const PhoneNumberLoginScreen({Key? key}) : super(key: key);
 
   @override
-  _PhoneNumberSignUpScreenState createState() =>
-      _PhoneNumberSignUpScreenState();
+  _PhoneNumberLoginScreenState createState() => _PhoneNumberLoginScreenState();
 }
 
-class _PhoneNumberSignUpScreenState extends State<PhoneNumberSignUpScreen> {
+class _PhoneNumberLoginScreenState extends State<PhoneNumberLoginScreen> {
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
   final TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final ThemeData themeData = Theme.of(context);
-    final double padding = 25.0;
-    final sidePadding = EdgeInsets.symmetric(horizontal: padding);
+    const double padding = 25.0;
+    const sidePadding = EdgeInsets.symmetric(horizontal: padding);
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -43,7 +42,7 @@ class _PhoneNumberSignUpScreenState extends State<PhoneNumberSignUpScreen> {
                     ),
                     width: 60,
                     height: 60,
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_back_ios_new_rounded,
                       color: COLOR_BLACK,
                     ),
@@ -52,13 +51,13 @@ class _PhoneNumberSignUpScreenState extends State<PhoneNumberSignUpScreen> {
                 addVerticalSpace(padding * 2),
                 RichText(
                   text: TextSpan(
-                    text: 'Create your',
+                    text: "Let's",
                     style: themeData.textTheme.headline4!.copyWith(
                       color: COLOR_SECONDARY,
                     ),
                     children: <TextSpan>[
                       TextSpan(
-                        text: ' account',
+                        text: ' Sign In',
                         style: themeData.textTheme.headline4!.copyWith(
                           color: COLOR_PRIMARY,
                           fontWeight: FontWeight.bold,
@@ -69,7 +68,7 @@ class _PhoneNumberSignUpScreenState extends State<PhoneNumberSignUpScreen> {
                 ),
                 addVerticalSpace(padding),
                 Text(
-                  'Create your account to save and post listings.',
+                  'Enter your phone number to sign in',
                   style: themeData.textTheme.bodyText2!.copyWith(
                     color: COLOR_SECONDARY,
                   ),
@@ -79,7 +78,7 @@ class _PhoneNumberSignUpScreenState extends State<PhoneNumberSignUpScreen> {
                   key: formkey,
                   child: IntlPhoneField(
                     controller: controller,
-                    flagsButtonPadding: EdgeInsets.only(left: 10),
+                    flagsButtonPadding: const EdgeInsets.only(left: 10),
                     dropdownIconPosition: IconPosition.trailing,
                     decoration: InputDecoration(
                       hintText: 'Mobile Number',
@@ -92,18 +91,18 @@ class _PhoneNumberSignUpScreenState extends State<PhoneNumberSignUpScreen> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                           color: COLOR_PRIMARY,
                         ),
                       ),
                     ),
                     initialCountryCode: 'ET',
                     onChanged: (phone) {
-                      print(phone.completeNumber);
+                      debugPrint(phone.completeNumber);
                     },
                   ),
                 ),
-                addVerticalSpace(padding),
+                addVerticalSpace(padding / 2),
                 Text(
                   'You will receive an SMS verification that may apply message and data rates',
                   style: themeData.textTheme.bodyText2!.copyWith(
@@ -125,24 +124,24 @@ class _PhoneNumberSignUpScreenState extends State<PhoneNumberSignUpScreen> {
                       onPressed: () {
                         Navigator.pushNamed(context, otpInputRoute);
                       },
-                      child: Text('Send code'),
+                      child: const Text('Sign in'),
                     ),
                   ],
                 ),
-                addVerticalSpace(padding * 2.75),
+                addVerticalSpace(padding),
                 addHorizontalDividerWithText('OR'),
-                addVerticalSpace(padding * 2),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    InkWell(
+                Expanded(
+                  child: Center(
+                    child: InkWell(
                       onTap: () {
                         Navigator.pushNamed(context, emailLoginRoute);
                       },
                       child: RichText(
                         text: TextSpan(
                           text: 'Use',
-                          style: themeData.textTheme.bodyText2,
+                          style: themeData.textTheme.bodyText2!.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                           children: <TextSpan>[
                             TextSpan(
                               text: ' Email',
@@ -155,18 +154,18 @@ class _PhoneNumberSignUpScreenState extends State<PhoneNumberSignUpScreen> {
                         ),
                       ),
                     ),
-                  ],
+                  ),
                 ),
-                addVerticalSpace(10),
                 Expanded(
+                  flex: 2,
                   child: Center(
                     child: InkWell(
                       onTap: () {
-                        Navigator.pushNamed(context, registerRoute);
+                        Navigator.pushNamed(context, phoneNumberRegisterRoute);
                       },
                       child: RichText(
                         text: TextSpan(
-                          text: 'Don\'t have an account?',
+                          text: "Don't have an account?",
                           style: themeData.textTheme.bodyText2,
                           children: <TextSpan>[
                             TextSpan(

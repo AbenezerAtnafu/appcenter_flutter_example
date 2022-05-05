@@ -1,7 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_job_one/utils/constants.dart';
 import 'package:flutter_job_one/utils/widgets_functions.dart';
 
@@ -26,8 +23,8 @@ class _OtpInputScreenState extends State<OtpInputScreen> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final ThemeData themeData = Theme.of(context);
-    final double padding = 25.0;
-    final sidePadding = EdgeInsets.symmetric(horizontal: padding);
+    const double padding = 25.0;
+    const sidePadding = EdgeInsets.symmetric(horizontal: padding);
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -50,7 +47,7 @@ class _OtpInputScreenState extends State<OtpInputScreen> {
                     ),
                     width: 60,
                     height: 60,
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_back_ios_new_rounded,
                       color: COLOR_BLACK,
                     ),
@@ -83,7 +80,7 @@ class _OtpInputScreenState extends State<OtpInputScreen> {
                     ),
                     children: <TextSpan>[
                       TextSpan(
-                        text: ' +251989574256',
+                        text: ' +2519********',
                         style: themeData.textTheme.bodyText2!.copyWith(
                           color: COLOR_SECONDARY,
                           fontWeight: FontWeight.bold,
@@ -105,7 +102,7 @@ class _OtpInputScreenState extends State<OtpInputScreen> {
                     OtpInput(_fieldFour, false)
                   ],
                 ),
-                Spacer(),
+                const Spacer(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -120,7 +117,7 @@ class _OtpInputScreenState extends State<OtpInputScreen> {
                       ),
                       child: Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.timer,
                             color: COLOR_SECONDARY,
                           ),
@@ -143,7 +140,7 @@ class _OtpInputScreenState extends State<OtpInputScreen> {
                   children: [
                     RichText(
                       text: TextSpan(
-                        text: 'Didn\'t receive the OTP?',
+                        text: "Didn't receive the OTP?",
                         style: themeData.textTheme.bodyText2!.copyWith(
                           color: COLOR_SECONDARY,
                         ),

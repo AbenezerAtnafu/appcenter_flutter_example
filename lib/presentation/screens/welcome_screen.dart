@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_job_one/presentation/screens/PhoneNumberLoginScreen.dart';
+import 'package:flutter_job_one/presentation/screens/phone_number_login_screen.dart';
 import 'package:flutter_job_one/utils/constants.dart';
 import 'package:flutter_job_one/utils/widgets_functions.dart';
 
@@ -16,18 +16,18 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   Widget build(BuildContext context) {
     Timer(
-      Duration(seconds: 3),
+      const Duration(seconds: 3),
       () => Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (BuildContext context) => PhoneNumberLoginScreen(),
+          builder: (BuildContext context) => const PhoneNumberLoginScreen(),
         ),
       ),
     );
     final Size size = MediaQuery.of(context).size;
     final ThemeData themeData = Theme.of(context);
-    final double padding = 25.0;
+    const double padding = 25.0;
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         width: size.width,
         height: size.height,
         child: Column(

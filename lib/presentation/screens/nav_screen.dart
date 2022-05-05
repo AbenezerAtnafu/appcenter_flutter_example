@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_job_one/presentation/router/routes.dart';
-import 'package:flutter_job_one/presentation/screens/AddPropertyScreen.dart';
-import 'package:flutter_job_one/presentation/screens/DetailScreen.dart';
-import 'package:flutter_job_one/presentation/screens/EditProfileScreen.dart';
-import 'package:flutter_job_one/presentation/screens/FavouriteScreen.dart';
-import 'package:flutter_job_one/presentation/screens/HomeScreen.dart';
-import 'package:flutter_job_one/presentation/screens/PropertyScreen.dart';
+import 'package:flutter_job_one/presentation/screens/add_property_screen.dart';
+import 'package:flutter_job_one/presentation/screens/detail_screen.dart';
+import 'package:flutter_job_one/presentation/screens/favourite_screen.dart';
+import 'package:flutter_job_one/presentation/screens/home_screen.dart';
+import 'package:flutter_job_one/presentation/screens/profile_screen.dart';
+import 'package:flutter_job_one/presentation/screens/property_screen.dart';
 import 'package:flutter_job_one/utils/constants.dart';
 
 class NavScreen extends StatefulWidget {
@@ -16,28 +16,31 @@ class NavScreen extends StatefulWidget {
 class _NavScreenState extends State<NavScreen> {
   int _currentIndex = 0;
 
-  final _screens = [
-    HomeScreen(),
-    FavouriteScreen(),
-    AddPropertyScreen(),
-    PropertyScreen(),
-    EditProfileScreen(),
-  ];
-
-  final labelStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 16);
+  final labelStyle = const TextStyle(fontWeight: FontWeight.bold, fontSize: 16);
 
   @override
   Widget build(BuildContext context) {
+    final _screens = [
+      const HomeScreen(),
+      const FavouriteScreen(),
+      const AddPropertyScreen(),
+      const PropertyScreen(),
+      const EditProfileScreen(),
+      const DetailScreen(),
+    ];
     return Scaffold(
       body: Stack(
         children: _screens
             .asMap()
-            .map((i, screen) => MapEntry(
+            .map(
+              (i, screen) => MapEntry(
                 i,
                 Offstage(
                   offstage: _currentIndex != i,
                   child: screen,
-                )))
+                ),
+              ),
+            )
             .values
             .toList(),
       ),
@@ -58,11 +61,10 @@ class _NavScreenState extends State<NavScreen> {
                 color: COLOR_PRIMARY.withOpacity(0.3),
                 spreadRadius: 20,
                 blurRadius: 10,
-                offset: Offset(0, 0),
               ),
             ],
           ),
-          child: Icon(Icons.add),
+          child: const Icon(Icons.add),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -85,7 +87,7 @@ class _NavScreenState extends State<NavScreen> {
               Navigator.pushNamed(context, addListingRoute),
             }
         },
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(
               Icons.home_outlined,

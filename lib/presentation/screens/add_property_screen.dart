@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_job_one/presentation/screens/EmailLoginScreen.dart';
-import 'package:flutter_job_one/sample_data.dart';
-import 'package:flutter_job_one/utils/constants.dart';
-import 'package:flutter_job_one/utils/custom_functions.dart';
-import 'package:flutter_job_one/utils/widgets_functions.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_job_one/presentation/screens/email_login_screen.dart';
+import 'package:flutter_job_one/presentation/screens/nav_screen.dart';
+import 'package:flutter_job_one/utils/constants.dart';
+import 'package:flutter_job_one/utils/widgets_functions.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
@@ -19,21 +18,21 @@ class AddPropertyScreen extends StatefulWidget {
 class _AddPropertyScreenState extends State<AddPropertyScreen> {
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
   final TextEditingController controller = TextEditingController();
+  List<XFile>? imagefiles;
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    final ThemeData themeData = Theme.of(context);
-    final double padding = 25.0;
-    final sidePadding = EdgeInsets.symmetric(horizontal: padding);
 
-    PageController controller = PageController();
+    final PageController controller = PageController();
     int _curr = 0;
-    List<Widget> _list = <Widget>[
+    final List<Widget> _list = <Widget>[
       StepOneForm(
         controller: controller,
       ),
       StepTwoForm(
         controller: controller,
+        imagefiles: imagefiles,
       ),
       StepThreeForm(
         controller: controller,
@@ -42,21 +41,17 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
 
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            width: size.width,
-            height: size.height,
-            child: PageView(
-              children: _list,
-              scrollDirection: Axis.horizontal,
-              pageSnapping: true,
-              physics: BouncingScrollPhysics(),
-              controller: controller,
-              onPageChanged: (num) {
-                print("Current page number is " + num.toString());
-                _curr = num;
-              },
-            ),
+        body: SizedBox(
+          width: size.width,
+          height: size.height,
+          child: PageView(
+            physics: const NeverScrollableScrollPhysics(),
+            controller: controller,
+            onPageChanged: (num) {
+              debugPrint("Current page number is $num");
+              _curr = num;
+            },
+            children: _list,
           ),
         ),
       ),
@@ -77,9 +72,9 @@ class _StepOneFormState extends State<StepOneForm> {
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
-    final double padding = 25.0;
+    const double padding = 25.0;
     final Size size = MediaQuery.of(context).size;
-    final sidePadding = EdgeInsets.symmetric(horizontal: padding);
+    const sidePadding = EdgeInsets.symmetric(horizontal: padding);
 
     return Container(
       padding: sidePadding,
@@ -104,7 +99,7 @@ class _StepOneFormState extends State<StepOneForm> {
                     ),
                     width: 60,
                     height: 60,
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_back_ios_new_rounded,
                       color: COLOR_BLACK,
                     ),
@@ -141,7 +136,7 @@ class _StepOneFormState extends State<StepOneForm> {
               style: themeData.textTheme.headline6,
             ),
             addVerticalSpace(padding / 2),
-            TextFieldContainer(
+            const TextFieldContainer(
               child: TextField(
                 decoration: InputDecoration(
                   hintText: 'Gerji, Addis ababa',
@@ -155,7 +150,7 @@ class _StepOneFormState extends State<StepOneForm> {
               style: themeData.textTheme.headline6,
             ),
             addVerticalSpace(padding / 2),
-            TextFieldContainer(
+            const TextFieldContainer(
               child: TextField(
                 decoration: InputDecoration(
                   hintText: 'Behind Roba dabo',
@@ -234,7 +229,7 @@ class _StepOneFormState extends State<StepOneForm> {
             ),
             addVerticalSpace(padding * 2),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: padding * 4),
+              padding: const EdgeInsets.symmetric(horizontal: padding * 4),
               child: LinearProgressIndicator(
                 value: 1 / 3,
                 backgroundColor: COLOR_GREY.withAlpha(40),
@@ -249,7 +244,7 @@ class _StepOneFormState extends State<StepOneForm> {
                     Navigator.pop(context);
                   },
                   child: Container(
-                    padding: EdgeInsets.all(15.0),
+                    padding: const EdgeInsets.all(15.0),
                     decoration: BoxDecoration(
                       color: COLOR_WHITE,
                       shape: BoxShape.circle,
@@ -258,11 +253,14 @@ class _StepOneFormState extends State<StepOneForm> {
                           color: Colors.grey.withOpacity(0.5),
                           spreadRadius: 5,
                           blurRadius: 7,
-                          offset: Offset(0, 3), // changes position of shadow
+                          offset: const Offset(
+                            0,
+                            3,
+                          ), // changes position of shadow
                         ),
                       ],
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_back_outlined,
                       color: COLOR_PRIMARY,
                     ),
@@ -276,16 +274,16 @@ class _StepOneFormState extends State<StepOneForm> {
                   onPressed: () {
                     widget.controller.animateToPage(
                       1,
-                      duration: Duration(microseconds: 300),
+                      duration: const Duration(microseconds: 300),
                       curve: Curves.ease,
                     );
                   },
                   child: Container(
-                    padding: EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                       horizontal: padding * 3,
                       vertical: 20,
                     ),
-                    child: Text('Next'),
+                    child: const Text('Next'),
                   ),
                 )
               ],
@@ -299,21 +297,21 @@ class _StepOneFormState extends State<StepOneForm> {
 
 class StepTwoForm extends StatefulWidget {
   PageController controller;
-  StepTwoForm({required this.controller});
+  List<XFile>? imagefiles;
+  StepTwoForm({required this.controller, required this.imagefiles});
   @override
   _StepTwoFormState createState() => _StepTwoFormState();
 }
 
 class _StepTwoFormState extends State<StepTwoForm> {
   final ImagePicker imgpicker = ImagePicker();
-  List<XFile>? imagefiles;
 
   openImages() async {
     try {
-      var pickedfiles = await imgpicker.pickMultiImage();
+      final pickedfiles = await imgpicker.pickMultiImage();
       //you can use ImageCourse.camera for Camera capture
       if (pickedfiles != null) {
-        imagefiles = pickedfiles;
+        widget.imagefiles = pickedfiles;
         setState(() {});
       } else {
         print("No image is selected.");
@@ -326,27 +324,27 @@ class _StepTwoFormState extends State<StepTwoForm> {
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
-    final double padding = 25.0;
+    const double padding = 25.0;
     final Size size = MediaQuery.of(context).size;
-    final sidePadding = EdgeInsets.symmetric(horizontal: padding);
+    const sidePadding = EdgeInsets.symmetric(horizontal: padding);
 
     return Container(
       padding: sidePadding,
       width: size.width,
+      height: size.height,
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                margin: const EdgeInsets.only(top: 25),
                 decoration: BoxDecoration(
                   color: COLOR_GREY.withAlpha(40),
                   shape: BoxShape.circle,
                 ),
                 width: 60,
                 height: 60,
-                child: Icon(
+                child: const Icon(
                   Icons.arrow_back_ios_new_rounded,
                   color: COLOR_BLACK,
                 ),
@@ -359,31 +357,32 @@ class _StepTwoFormState extends State<StepTwoForm> {
             ],
           ),
           addVerticalSpace(padding),
-          imagefiles != null
-              ? RichText(
-                  text: TextSpan(
-                    text: 'Add',
+          if (widget.imagefiles != null)
+            RichText(
+              text: TextSpan(
+                text: 'Add',
+                style: themeData.textTheme.headline5!.copyWith(
+                  color: COLOR_SECONDARY,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: ' photos',
+                    style: themeData.textTheme.headline5!.copyWith(
+                      color: COLOR_PRIMARY,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' to your listing',
                     style: themeData.textTheme.headline5!.copyWith(
                       color: COLOR_SECONDARY,
                     ),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: ' photos',
-                        style: themeData.textTheme.headline5!.copyWith(
-                          color: COLOR_PRIMARY,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      TextSpan(
-                        text: ' to your listing',
-                        style: themeData.textTheme.headline5!.copyWith(
-                          color: COLOR_SECONDARY,
-                        ),
-                      ),
-                    ],
                   ),
-                )
-              : SizedBox.shrink(),
+                ],
+              ),
+            )
+          else
+            const SizedBox.shrink(),
           // addVerticalSpace(padding),
 
           addVerticalSpace(padding),
@@ -393,70 +392,73 @@ class _StepTwoFormState extends State<StepTwoForm> {
           //   },
           //   child: Text("Open Images"),
           // ),
-          imagefiles != null
-              ? Wrap(
-                  children: imagefiles!.map(
-                    (imageone) {
-                      return Container(
-                        child: Card(
-                          child: Container(
-                            height: 100,
-                            width: 100,
-                            child: Image.file(File(imageone.path)),
-                          ),
-                        ),
-                      );
-                    },
-                  ).toList(),
-                )
-              : Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 60,
-                              color: COLOR_PRIMARY,
-                              spreadRadius: 15,
-                            )
-                          ],
-                        ),
-                        child: CircleAvatar(
-                          radius: 30.0,
-                          backgroundColor: COLOR_PRIMARY,
-                          child: IconButton(
-                            onPressed: () {
-                              openImages();
-                            },
-                            icon: Icon(Icons.explicit_sharp),
-                            color: COLOR_WHITE,
-                          ),
-                        ),
+          if (widget.imagefiles != null)
+            Wrap(
+              children: widget.imagefiles!.map(
+                (imageone) {
+                  return Container(
+                    child: Card(
+                      child: SizedBox(
+                        height: 100,
+                        width: 100,
+                        child: Image.file(File(imageone.path)),
                       ),
-                      addVerticalSpace(padding),
-                      Padding(
-                        padding: EdgeInsets.all(padding),
-                        child: Text(
-                          'Add at least 1 picture to continue.',
-                          style: themeData.textTheme.headline5!.copyWith(
-                            color: COLOR_SECONDARY,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
+                    ),
+                  );
+                },
+              ).toList(),
+            )
+          else
+            Expanded(
+              flex: 4,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 60,
+                          color: COLOR_PRIMARY,
+                          spreadRadius: 15,
+                        )
+                      ],
+                    ),
+                    child: CircleAvatar(
+                      radius: 30.0,
+                      backgroundColor: COLOR_PRIMARY,
+                      child: IconButton(
+                        onPressed: () {
+                          openImages();
+                        },
+                        icon: const Icon(Icons.explicit_sharp),
+                        color: COLOR_WHITE,
                       ),
-                      addVerticalSpace(30),
-                    ],
+                    ),
                   ),
-                ),
+                  addVerticalSpace(padding),
+                  Padding(
+                    padding: const EdgeInsets.all(padding),
+                    child: Text(
+                      'Add at least 1 picture to continue.',
+                      style: themeData.textTheme.headline5!.copyWith(
+                        color: COLOR_SECONDARY,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  addVerticalSpace(30),
+                ],
+              ),
+            ),
           addVerticalSpace(padding),
-          Container(
+          Expanded(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: padding * 4),
+                  padding: const EdgeInsets.symmetric(horizontal: padding * 4),
                   child: LinearProgressIndicator(
                     value: 2 / 3,
                     backgroundColor: COLOR_GREY.withAlpha(40),
@@ -470,12 +472,12 @@ class _StepTwoFormState extends State<StepTwoForm> {
                       onTap: () {
                         widget.controller.animateToPage(
                           0,
-                          duration: Duration(microseconds: 300),
+                          duration: const Duration(microseconds: 300),
                           curve: Curves.ease,
                         );
                       },
                       child: Container(
-                        padding: EdgeInsets.all(15.0),
+                        padding: const EdgeInsets.all(15.0),
                         decoration: BoxDecoration(
                           color: COLOR_WHITE,
                           shape: BoxShape.circle,
@@ -484,12 +486,14 @@ class _StepTwoFormState extends State<StepTwoForm> {
                               color: Colors.grey.withOpacity(0.5),
                               spreadRadius: 5,
                               blurRadius: 7,
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
+                              offset: const Offset(
+                                0,
+                                3,
+                              ), // changes position of shadow
                             ),
                           ],
                         ),
-                        child: Icon(
+                        child: const Icon(
                           Icons.arrow_back_outlined,
                           color: COLOR_PRIMARY,
                         ),
@@ -503,23 +507,24 @@ class _StepTwoFormState extends State<StepTwoForm> {
                       onPressed: () {
                         widget.controller.animateToPage(
                           2,
-                          duration: Duration(microseconds: 300),
+                          duration: const Duration(microseconds: 300),
                           curve: Curves.ease,
                         );
                       },
                       child: Container(
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: padding * 3,
                           vertical: 20,
                         ),
-                        child: Text('Next'),
+                        child: const Text('Next'),
                       ),
                     )
                   ],
                 ),
               ],
             ),
-          )
+          ),
+          addVerticalSpace(padding * 2)
         ],
       ),
     );
@@ -541,11 +546,11 @@ class _StepThreeFormState extends State<StepThreeForm> {
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
-    final double padding = 25.0;
+    const double padding = 25.0;
     final Size size = MediaQuery.of(context).size;
-    final sidePadding = EdgeInsets.symmetric(horizontal: padding);
+    const sidePadding = EdgeInsets.symmetric(horizontal: padding);
 
-    return Container(
+    return SizedBox(
       width: size.width,
       height: size.height,
       child: SingleChildScrollView(
@@ -568,7 +573,7 @@ class _StepThreeFormState extends State<StepThreeForm> {
                       ),
                       width: 60,
                       height: 60,
-                      child: Icon(
+                      child: const Icon(
                         Icons.arrow_back_ios_new_rounded,
                         color: COLOR_BLACK,
                       ),
@@ -615,8 +620,8 @@ class _StepThreeFormState extends State<StepThreeForm> {
                   child: TextFieldContainer(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
+                      children: const [
+                        SizedBox(
                           width: 180,
                           child: TextField(
                             decoration: InputDecoration(
@@ -648,8 +653,8 @@ class _StepThreeFormState extends State<StepThreeForm> {
                   child: TextFieldContainer(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
+                      children: const [
+                        SizedBox(
                           width: 180,
                           child: TextField(
                             decoration: InputDecoration(
@@ -673,8 +678,8 @@ class _StepThreeFormState extends State<StepThreeForm> {
                   child: TextFieldContainer(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
+                      children: const [
+                        SizedBox(
                           width: 180,
                           child: TextField(
                             decoration: InputDecoration(
@@ -698,8 +703,8 @@ class _StepThreeFormState extends State<StepThreeForm> {
                   child: TextFieldContainer(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
+                      children: const [
+                        SizedBox(
                           width: 180,
                           child: TextField(
                             decoration: InputDecoration(
@@ -801,21 +806,19 @@ class _StepThreeFormState extends State<StepThreeForm> {
                   ),
                 ),
                 addVerticalSpace(padding / 2),
-                Padding(
+                const Padding(
                   padding: sidePadding,
                   child: TextField(
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
-                    maxLength: null,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          width: 1,
+                        borderSide: BorderSide(
                           color: COLOR_GREY,
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
+                        borderSide: BorderSide(
                           width: 2,
                           color: COLOR_GREY,
                         ),
@@ -838,7 +841,7 @@ class _StepThreeFormState extends State<StepThreeForm> {
                     key: formkey,
                     child: IntlPhoneField(
                       controller: controller,
-                      flagsButtonPadding: EdgeInsets.only(left: 10),
+                      flagsButtonPadding: const EdgeInsets.only(left: 10),
                       dropdownIconPosition: IconPosition.trailing,
                       decoration: InputDecoration(
                         hintText: 'Mobile Number',
@@ -851,7 +854,7 @@ class _StepThreeFormState extends State<StepThreeForm> {
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             color: COLOR_PRIMARY,
                           ),
                         ),
@@ -864,11 +867,12 @@ class _StepThreeFormState extends State<StepThreeForm> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(bottom: 50),
+                  margin: const EdgeInsets.only(bottom: 50),
                   child: Column(
                     children: [
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: padding * 4),
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: padding * 4),
                         child: LinearProgressIndicator(
                           value: 3 / 3,
                           backgroundColor: COLOR_GREY.withAlpha(40),
@@ -882,12 +886,12 @@ class _StepThreeFormState extends State<StepThreeForm> {
                             onTap: () {
                               widget.controller.animateToPage(
                                 1,
-                                duration: Duration(microseconds: 300),
+                                duration: const Duration(microseconds: 300),
                                 curve: Curves.ease,
                               );
                             },
                             child: Container(
-                              padding: EdgeInsets.all(15.0),
+                              padding: const EdgeInsets.all(15.0),
                               decoration: BoxDecoration(
                                 color: COLOR_WHITE,
                                 shape: BoxShape.circle,
@@ -896,12 +900,14 @@ class _StepThreeFormState extends State<StepThreeForm> {
                                     color: Colors.grey.withOpacity(0.5),
                                     spreadRadius: 5,
                                     blurRadius: 7,
-                                    offset: Offset(
-                                        0, 3), // changes position of shadow
+                                    offset: const Offset(
+                                      0,
+                                      3,
+                                    ), // changes position of shadow
                                   ),
                                 ],
                               ),
-                              child: Icon(
+                              child: const Icon(
                                 Icons.arrow_back_outlined,
                                 color: COLOR_PRIMARY,
                               ),
@@ -914,7 +920,7 @@ class _StepThreeFormState extends State<StepThreeForm> {
                             ),
                             onPressed: () {
                               showModalBottomSheet<void>(
-                                shape: RoundedRectangleBorder(
+                                shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.vertical(
                                     top: Radius.circular(75),
                                   ),
@@ -925,7 +931,7 @@ class _StepThreeFormState extends State<StepThreeForm> {
                                 builder: (BuildContext context) {
                                   return Container(
                                     height: size.height * 0.5,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       color: COLOR_WHITE,
                                     ),
                                     child: Column(
@@ -936,13 +942,13 @@ class _StepThreeFormState extends State<StepThreeForm> {
                                           padding:
                                               const EdgeInsets.only(top: 20),
                                           width: 80,
-                                          child: Divider(
+                                          child: const Divider(
                                             color: COLOR_BLACK,
                                             thickness: 2,
                                           ),
                                         ),
                                         Container(
-                                          decoration: BoxDecoration(
+                                          decoration: const BoxDecoration(
                                             shape: BoxShape.circle,
                                             boxShadow: [
                                               BoxShadow(
@@ -952,7 +958,7 @@ class _StepThreeFormState extends State<StepThreeForm> {
                                               )
                                             ],
                                           ),
-                                          child: CircleAvatar(
+                                          child: const CircleAvatar(
                                             radius: 30.0,
                                             backgroundColor: COLOR_PRIMARY,
                                             child: Icon(
@@ -994,20 +1000,25 @@ class _StepThreeFormState extends State<StepThreeForm> {
                                                 style: ElevatedButton.styleFrom(
                                                   elevation: 0,
                                                   minimumSize: Size(
-                                                      size.width * 0.4, 60),
+                                                    size.width * 0.4,
+                                                    60,
+                                                  ),
                                                   primary:
                                                       COLOR_GREY.withAlpha(30),
                                                 ),
                                                 onPressed: () {
+                                                  Navigator.pop(context);
+
                                                   widget.controller
                                                       .animateToPage(
                                                     0,
-                                                    duration: Duration(
-                                                        microseconds: 300),
+                                                    duration: const Duration(
+                                                      microseconds: 300,
+                                                    ),
                                                     curve: Curves.ease,
                                                   );
                                                 },
-                                                child: Text(
+                                                child: const Text(
                                                   'Add More',
                                                   style: TextStyle(
                                                     color: COLOR_PRIMARY,
@@ -1019,11 +1030,22 @@ class _StepThreeFormState extends State<StepThreeForm> {
                                                 style: ElevatedButton.styleFrom(
                                                   elevation: 0,
                                                   minimumSize: Size(
-                                                      size.width * 0.4, 60),
+                                                    size.width * 0.4,
+                                                    60,
+                                                  ),
                                                   primary: COLOR_PRIMARY,
                                                 ),
-                                                onPressed: () {},
-                                                child: Text('Finish'),
+                                                onPressed: () {
+                                                  Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (BuildContext
+                                                              context) =>
+                                                          NavScreen(),
+                                                    ),
+                                                  );
+                                                },
+                                                child: const Text('Finish'),
                                               ),
                                             ],
                                           ),
@@ -1035,11 +1057,11 @@ class _StepThreeFormState extends State<StepThreeForm> {
                               );
                             },
                             child: Container(
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                 horizontal: padding * 3,
                                 vertical: 20,
                               ),
-                              child: Text('Next'),
+                              child: const Text('Next'),
                             ),
                           )
                         ],
@@ -1075,7 +1097,7 @@ class MyRadioListTile<T> extends StatelessWidget {
       onTap: () => onChanged(value),
       child: Container(
         height: 60,
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         child: _customRadioButton,
       ),
     );
@@ -1085,7 +1107,7 @@ class MyRadioListTile<T> extends StatelessWidget {
     final isSelected = value == groupValue;
     return Container(
       width: 100,
-      padding: EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
         color: isSelected ? COLOR_PRIMARY : COLOR_GREY.withAlpha(30),
         borderRadius: BorderRadius.circular(10),
@@ -1105,22 +1127,27 @@ class MyRadioListTile<T> extends StatelessWidget {
 }
 
 class CirclePainter extends CustomPainter {
-  final Paint lightBluePaint = Paint()..color = Color(0xFFBCCAD3);
-  final Paint bluePaint = Paint()..color = Color(0xFFBCCAD3);
+  final Paint lightBluePaint = Paint()..color = const Color(0xFFBCCAD3);
+  final Paint bluePaint = Paint()..color = const Color(0xFFBCCAD3);
   final TextPainter textPainter = TextPainter(
     textDirection: TextDirection.ltr,
   );
 
   final TextStyle textStyle = TextStyle(
-      color: Colors.white.withAlpha(240),
-      fontSize: 18,
-      letterSpacing: 1.2,
-      fontWeight: FontWeight.w900);
+    color: Colors.white.withAlpha(240),
+    fontSize: 18,
+    letterSpacing: 1.2,
+    fontWeight: FontWeight.w900,
+  );
 
   @override
   void paint(Canvas canvas, Size size) {
-    var rect = Rect.fromLTRB(
-        -80, size.height - 60, size.width * 0.3, size.height + 60);
+    final rect = Rect.fromLTRB(
+      -80,
+      size.height - 60,
+      size.width * 0.3,
+      size.height + 60,
+    );
 
     final Path circle = Path()..addOval(rect);
     final Path smallCircle = Path()..addOval(rect.inflate(120));

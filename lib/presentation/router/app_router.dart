@@ -1,18 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_job_one/presentation/router/routes.dart';
-import 'package:flutter_job_one/presentation/screens/AddPropertyScreen.dart';
-import 'package:flutter_job_one/presentation/screens/DetailScreen.dart';
-import 'package:flutter_job_one/presentation/screens/EditProfileScreen.dart';
-import 'package:flutter_job_one/presentation/screens/EmailLoginScreen.dart';
-import 'package:flutter_job_one/presentation/screens/FavouriteScreen.dart';
-import 'package:flutter_job_one/presentation/screens/HomeScreen.dart';
-import 'package:flutter_job_one/presentation/screens/NavScreen.dart';
-import 'package:flutter_job_one/presentation/screens/OnBoardingScreen.dart';
-import 'package:flutter_job_one/presentation/screens/OtpInputScreen.dart';
-import 'package:flutter_job_one/presentation/screens/PhoneNumberLoginScreen.dart';
-import 'package:flutter_job_one/presentation/screens/PropertyScreen.dart';
-import 'package:flutter_job_one/presentation/screens/RegisterScreen.dart';
+import 'package:flutter_job_one/presentation/screens/add_property_screen.dart';
+import 'package:flutter_job_one/presentation/screens/detail_screen.dart';
+import 'package:flutter_job_one/presentation/screens/edit_property_screen.dart';
+import 'package:flutter_job_one/presentation/screens/email_login_screen.dart';
+import 'package:flutter_job_one/presentation/screens/nav_screen.dart';
+import 'package:flutter_job_one/presentation/screens/otp_input_screen.dart';
+import 'package:flutter_job_one/presentation/screens/phone_number_login_screen.dart';
+import 'package:flutter_job_one/presentation/screens/phone_number_signup_screen.dart';
+import 'package:flutter_job_one/presentation/screens/register_screen.dart';
+import 'package:flutter_job_one/presentation/screens/welcome_screen.dart';
 
 class AppRouter {
   static Route<dynamic> generageRoute(RouteSettings settings) {
@@ -20,27 +17,57 @@ class AppRouter {
       case navRoute:
         return MaterialPageRoute(builder: (_) => NavScreen());
       case phoneNumberLoginRoute:
-        return MaterialPageRoute(builder: (_) => PhoneNumberLoginScreen());
+        return MaterialPageRoute(
+          builder: (_) => const PhoneNumberLoginScreen(),
+        );
       case emailLoginRoute:
-        return MaterialPageRoute(builder: (_) => EmailLoginScreen());
+        return MaterialPageRoute(
+          builder: (_) => const EmailLoginScreen(),
+        );
       case addListingRoute:
-        return MaterialPageRoute(builder: (_) => AddPropertyScreen());
+        return MaterialPageRoute(
+          builder: (_) => const AddPropertyScreen(),
+        );
       case detailRoute:
-        return MaterialPageRoute(builder: (_) => DetailScreen());
-      case favouriteRoute:
-        return MaterialPageRoute(builder: (_) => FavouriteScreen());
-      case homeRoute:
-        return MaterialPageRoute(builder: (_) => HomeScreen());
+        return MaterialPageRoute(
+          builder: (_) => const DetailScreen(),
+        );
+      // case favouriteRoute:
+      //   return MaterialPageRoute(
+      //     builder: (_) => const FavouriteScreen(),
+      //   );
+      // case homeRoute:
+      //   return MaterialPageRoute(
+      //     builder: (_) => const HomeScreen(),
+      //   );
       case otpInputRoute:
-        return MaterialPageRoute(builder: (_) => OtpInputScreen());
+        return MaterialPageRoute(
+          builder: (_) => const OtpInputScreen(),
+        );
       case registerRoute:
-        return MaterialPageRoute(builder: (_) => RegisterScreen());
+        return MaterialPageRoute(
+          builder: (_) => const RegisterScreen(),
+        );
       case onBoardingRoute:
-        return MaterialPageRoute(builder: (_) => OnBoardingScreen());
-      case editProfileRoute:
-        return MaterialPageRoute(builder: (_) => EditProfileScreen());
-      case propertyRoute:
-        return MaterialPageRoute(builder: (_) => PropertyScreen());
+        return MaterialPageRoute(
+          builder: (_) => const OnBoardingScreen(),
+        );
+      // case editProfileRoute:
+      //   return MaterialPageRoute(
+      //     builder: (_) => const EditProfileScreen(),
+      //   );
+      // case propertyRoute:
+      //   return MaterialPageRoute(
+      //     builder: (_) => const PropertyScreen(),
+      //   );
+      case phoneNumberRegisterRoute:
+        return MaterialPageRoute(
+          builder: (_) => const PhoneNumberSignupScreen(),
+        );
+      case editPropertyRoute:
+        return MaterialPageRoute(
+          builder: (_) => const EditPropertyScreen(),
+        );
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

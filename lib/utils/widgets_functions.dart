@@ -12,19 +12,19 @@ Widget addHorizontalSpace(double width) {
 Widget addHorizontalDividerWithText(String text) {
   return Row(
     children: [
-      Expanded(
+      const Expanded(
         child: Divider(
           endIndent: 10,
           color: COLOR_GREY,
         ),
       ),
       Text(
-        '$text',
+        text,
         style: TextStyle(
           color: COLOR_GREY.withAlpha(80),
         ),
       ),
-      Expanded(
+      const Expanded(
         child: Divider(
           indent: 10,
           color: COLOR_GREY,
