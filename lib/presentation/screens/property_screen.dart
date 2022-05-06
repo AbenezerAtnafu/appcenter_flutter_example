@@ -65,7 +65,7 @@ class _PropertyScreenState extends State<PropertyScreen>
                     ],
                   ),
                 ),
-                addVerticalSpace(padding * 4),
+                addVerticalSpace(padding * 2),
                 Center(
                   child: Text(
                     'Michael Solomon',

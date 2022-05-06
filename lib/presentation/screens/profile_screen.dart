@@ -30,174 +30,174 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     const sidePadding = EdgeInsets.symmetric(horizontal: padding);
     return SafeArea(
       child: Scaffold(
-        body: Container(
-          padding: sidePadding,
-          width: size.width,
-          height: size.height,
-          child: Column(
-            children: [
-              addVerticalSpace(padding),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: COLOR_GREY.withAlpha(40),
-                        shape: BoxShape.circle,
+        body: SingleChildScrollView(
+          child: Container(
+            padding: sidePadding,
+            width: size.width,
+            height: size.height,
+            child: Column(
+              children: [
+                addVerticalSpace(padding),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: COLOR_GREY.withAlpha(40),
+                          shape: BoxShape.circle,
+                        ),
+                        width: 60,
+                        height: 60,
+                        child: const Icon(
+                          Icons.arrow_back_ios_new_rounded,
+                          color: COLOR_BLACK,
+                        ),
                       ),
-                      width: 60,
-                      height: 60,
-                      child: const Icon(
-                        Icons.arrow_back_ios_new_rounded,
-                        color: COLOR_BLACK,
+                    ),
+                    Text(
+                      'Edit Profile',
+                      style: themeData.textTheme.headline6,
+                    ),
+                    Container()
+                  ],
+                ),
+                addVerticalSpace(padding),
+                const TextFieldContainer(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      suffixIcon: Icon(
+                        Icons.account_circle,
+                        color: COLOR_SECONDARY,
+                      ),
+                      hintText: 'Michael Solomon',
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+                addVerticalSpace(padding / 2),
+                const TextFieldContainer(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      suffixIcon: Icon(
+                        Icons.phone,
+                        color: COLOR_SECONDARY,
+                      ),
+                      hintText: '+251 966303009',
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+                addVerticalSpace(padding / 2),
+                const TextFieldContainer(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      suffixIcon: Icon(
+                        Icons.email_outlined,
+                        color: COLOR_SECONDARY,
+                      ),
+                      hintText: 'se.michael.solomon@gmail.com',
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+                addVerticalSpace(padding / 2),
+                const TextFieldContainer(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      suffixIcon: Icon(
+                        Icons.lock,
+                        color: COLOR_SECONDARY,
+                      ),
+                      hintText: 'Change Password',
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+                addVerticalSpace(padding),
+                Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(size.width * 0.75, 70),
+                      primary: COLOR_PRIMARY,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
                     ),
-                  ),
-                  Text(
-                    'Edit Profile',
-                    style: themeData.textTheme.headline6,
-                  ),
-                  Container()
-                ],
-              ),
-              addVerticalSpace(padding * 2),
-              const TextFieldContainer(
-                child: TextField(
-                  decoration: InputDecoration(
-                    suffixIcon: Icon(
-                      Icons.account_circle,
-                      color: COLOR_SECONDARY,
-                    ),
-                    hintText: 'Michael Solomon',
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-              addVerticalSpace(padding / 2),
-              const TextFieldContainer(
-                child: TextField(
-                  decoration: InputDecoration(
-                    suffixIcon: Icon(
-                      Icons.phone,
-                      color: COLOR_SECONDARY,
-                    ),
-                    hintText: '+251 966303009',
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-              addVerticalSpace(padding / 2),
-              const TextFieldContainer(
-                child: TextField(
-                  decoration: InputDecoration(
-                    suffixIcon: Icon(
-                      Icons.email_outlined,
-                      color: COLOR_SECONDARY,
-                    ),
-                    hintText: 'se.michael.solomon@gmail.com',
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-              addVerticalSpace(padding / 2),
-              const TextFieldContainer(
-                child: TextField(
-                  decoration: InputDecoration(
-                    suffixIcon: Icon(
-                      Icons.lock,
-                      color: COLOR_SECONDARY,
-                    ),
-                    hintText: 'Change Password',
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-              addVerticalSpace(padding * 2),
-              Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(size.width * 0.75, 70),
-                    primary: COLOR_PRIMARY,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, otpInputRoute);
-                  },
-                  child: const Text('Save'),
-                ),
-              ),
-              addVerticalSpace(padding * 2),
-              const Spacer(),
-              Center(
-                child: Text(
-                  'Follow us on',
-                  style: themeData.textTheme.bodyText1,
-                ),
-              ),
-              addVerticalSpace(padding / 2),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: const FaIcon(
-                      FontAwesomeIcons.facebook,
-                      color: COLOR_PRIMARY,
-                      size: 30,
-                    ),
                     onPressed: () {
-                      _facebookLaunchUrl();
+                      Navigator.pushNamed(context, otpInputRoute);
                     },
+                    child: const Text('Save'),
                   ),
-                  IconButton(
-                    icon: const FaIcon(
-                      FontAwesomeIcons.linkedin,
-                      color: COLOR_PRIMARY,
-                      size: 30,
+                ),
+                addVerticalSpace(padding),
+                Center(
+                  child: Text(
+                    'Follow us on',
+                    style: themeData.textTheme.bodyText1,
+                  ),
+                ),
+                addVerticalSpace(10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: const FaIcon(
+                        FontAwesomeIcons.facebook,
+                        color: COLOR_PRIMARY,
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        _facebookLaunchUrl();
+                      },
                     ),
-                    onPressed: () {
-                      _linkedinLaunchUrl();
-                    },
-                  ),
-                  IconButton(
-                    icon: const FaIcon(
-                      FontAwesomeIcons.telegram,
-                      color: COLOR_PRIMARY,
-                      size: 30,
+                    IconButton(
+                      icon: const FaIcon(
+                        FontAwesomeIcons.linkedin,
+                        color: COLOR_PRIMARY,
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        _linkedinLaunchUrl();
+                      },
                     ),
-                    onPressed: () {
-                      _telegramLaunchUrl();
-                    },
-                  ),
-                  IconButton(
-                    icon: const FaIcon(
-                      FontAwesomeIcons.instagramSquare,
-                      color: Colors.purple,
-                      size: 30,
+                    IconButton(
+                      icon: const FaIcon(
+                        FontAwesomeIcons.telegram,
+                        color: COLOR_PRIMARY,
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        _telegramLaunchUrl();
+                      },
                     ),
-                    onPressed: () {
-                      _instagramLanuchUrl();
-                    },
-                  ),
-                  IconButton(
-                    icon: FaIcon(
-                      FontAwesomeIcons.twitter,
-                      color: COLOR_PRIMARY.withAlpha(200),
-                      size: 30,
+                    IconButton(
+                      icon: const FaIcon(
+                        FontAwesomeIcons.instagramSquare,
+                        color: Colors.purple,
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        _instagramLanuchUrl();
+                      },
                     ),
-                    onPressed: () {
-                      _twitterLaunchUrl();
-                    },
-                  ),
-                ],
-              ),
-              addVerticalSpace(padding + 10),
-            ],
+                    IconButton(
+                      icon: FaIcon(
+                        FontAwesomeIcons.twitter,
+                        color: COLOR_PRIMARY.withAlpha(200),
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        _twitterLaunchUrl();
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

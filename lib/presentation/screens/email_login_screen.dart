@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_job_one/presentation/router/routes.dart';
 import 'package:flutter_job_one/utils/constants.dart';
 import 'package:flutter_job_one/utils/widgets_functions.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 class EmailLoginScreen extends StatefulWidget {
   const EmailLoginScreen({Key? key}) : super(key: key);
@@ -18,157 +19,185 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     const double padding = 25.0;
     const sidePadding = EdgeInsets.symmetric(horizontal: padding);
     return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            padding: sidePadding,
-            width: size.width,
-            height: size.height,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.asset('assets/images/login_header.png'),
-                addVerticalSpace(padding),
-                RichText(
-                  text: TextSpan(
-                    text: "Let's",
-                    style: themeData.textTheme.headline4!.copyWith(
-                      color: COLOR_SECONDARY,
-                    ),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: ' Sign In',
+      child: Mutation(
+        options: MutationOptions(document: gql(rickCharacters)),
+        builder: (runMutation, result) {
+          return Scaffold(
+            body: SingleChildScrollView(
+              child: Container(
+                padding: sidePadding,
+                width: size.width,
+                height: size.height,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Image.asset('assets/images/login_header.png'),
+                    addVerticalSpace(padding),
+                    RichText(
+                      text: TextSpan(
+                        text: "Let's",
                         style: themeData.textTheme.headline4!.copyWith(
-                          color: COLOR_PRIMARY,
+                          color: COLOR_SECONDARY,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: ' Sign In',
+                            style: themeData.textTheme.headline4!.copyWith(
+                              color: COLOR_PRIMARY,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    addVerticalSpace(padding),
+                    Text(
+                      'Enter your email and password to sign in.',
+                      style: themeData.textTheme.bodyText2!.copyWith(
+                        color: COLOR_SECONDARY,
+                      ),
+                    ),
+                    addVerticalSpace(padding * 1.5),
+                    const TextFieldContainer(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          icon: Icon(
+                            Icons.email_outlined,
+                            color: COLOR_SECONDARY,
+                          ),
+                          hintText: 'Email',
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                    addVerticalSpace(padding / 2),
+                    const TextFieldContainer(
+                      child: TextField(
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          icon: Icon(
+                            Icons.lock_outline_rounded,
+                            color: COLOR_SECONDARY,
+                          ),
+                          hintText: 'Password',
+                          border: InputBorder.none,
+                          suffixIcon: Icon(
+                            Icons.visibility,
+                            color: COLOR_SECONDARY,
+                          ),
+                        ),
+                      ),
+                    ),
+                    addVerticalSpace(4),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Forgot Password?',
+                        style: themeData.textTheme.bodyText2!.copyWith(
+                          color: COLOR_SECONDARY,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                addVerticalSpace(padding),
-                Text(
-                  'Enter your email and password to sign in.',
-                  style: themeData.textTheme.bodyText2!.copyWith(
-                    color: COLOR_SECONDARY,
-                  ),
-                ),
-                addVerticalSpace(padding * 1.5),
-                const TextFieldContainer(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.email_outlined,
-                        color: COLOR_SECONDARY,
-                      ),
-                      hintText: 'Email',
-                      border: InputBorder.none,
                     ),
-                  ),
-                ),
-                addVerticalSpace(padding / 2),
-                const TextFieldContainer(
-                  child: TextField(
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.lock_outline_rounded,
-                        color: COLOR_SECONDARY,
-                      ),
-                      hintText: 'Password',
-                      border: InputBorder.none,
-                      suffixIcon: Icon(
-                        Icons.visibility,
-                        color: COLOR_SECONDARY,
-                      ),
-                    ),
-                  ),
-                ),
-                addVerticalSpace(4),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Forgot Password?',
-                    style: themeData.textTheme.bodyText2!.copyWith(
-                      color: COLOR_SECONDARY,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                addVerticalSpace(10),
-                Center(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size(size.width * 0.75, 50),
-                      primary: COLOR_PRIMARY,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, navRoute);
-                    },
-                    child: const Text('Sign in'),
-                  ),
-                ),
-                addVerticalSpace(padding),
-                addHorizontalDividerWithText('OR'),
-                Expanded(
-                  child: Center(
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, phoneNumberLoginRoute);
-                      },
-                      child: RichText(
-                        text: TextSpan(
-                          text: 'Use',
-                          style: themeData.textTheme.bodyText2!.copyWith(
-                            fontWeight: FontWeight.bold,
+                    addVerticalSpace(10),
+                    Center(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(size.width * 0.75, 50),
+                          primary: COLOR_PRIMARY,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: ' Phone Number',
+                        ),
+                        onPressed: () {
+                          // Navigator.pushNamed(context, navRoute);
+                          runMutation({
+                            'email': 'se.michael.solomon@gmail.com',
+                            'password': 'pass1234'
+                          });
+                          print("object");
+                          print(result);
+                        },
+                        child: const Text('Sign in'),
+                      ),
+                    ),
+                    addVerticalSpace(padding),
+                    addHorizontalDividerWithText('OR'),
+                    Expanded(
+                      child: Center(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              phoneNumberLoginRoute,
+                            );
+                          },
+                          child: RichText(
+                            text: TextSpan(
+                              text: 'Use',
                               style: themeData.textTheme.bodyText2!.copyWith(
-                                color: COLOR_PRIMARY,
                                 fontWeight: FontWeight.bold,
                               ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: ' Phone Number',
+                                  style:
+                                      themeData.textTheme.bodyText2!.copyWith(
+                                    color: COLOR_PRIMARY,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-                addVerticalSpace(10),
-                Expanded(
-                  flex: 2,
-                  child: Center(
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, registerRoute);
-                      },
-                      child: RichText(
-                        text: TextSpan(
-                          text: "Don't have an account?",
-                          style: themeData.textTheme.bodyText2,
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: ' Register',
-                              style: themeData.textTheme.bodyText2!.copyWith(
-                                color: COLOR_PRIMARY,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
+                    addVerticalSpace(10),
+                    Card(
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        color: Colors.white,
+                        child: Text(
+                          result!.data == null
+                              ? '''Post details coming up shortly,'''
+                                  ''' Kindly enter details and create a post'''
+                              : result.data.toString(),
                         ),
                       ),
                     ),
-                  ),
+                    Expanded(
+                      flex: 2,
+                      child: Center(
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, registerRoute);
+                          },
+                          child: RichText(
+                            text: TextSpan(
+                              text: "Don't have an account?",
+                              style: themeData.textTheme.bodyText2,
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: ' Register',
+                                  style:
+                                      themeData.textTheme.bodyText2!.copyWith(
+                                    color: COLOR_PRIMARY,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }
@@ -197,3 +226,23 @@ class TextFieldContainer extends StatelessWidget {
     );
   }
 }
+
+const rickCharacters = '''
+ mutation userLogin(\$email: String!, \$password: String!) {
+    authenticatable {
+      email
+      id
+      name
+      phoneNumber
+      
+      roles
+    }s
+    credentials {
+      accessToken
+      client
+      expiry
+      tokenType
+      uid
+    }
+  }
+ ''';
