@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_job_one/presentation/router/router_arguments.dart';
 import 'package:flutter_job_one/presentation/router/routes.dart';
+import 'package:flutter_job_one/service/models/Code.dart';
+import 'package:flutter_job_one/service/repository/repository.dart';
 import 'package:flutter_job_one/utils/constants.dart';
 import 'package:flutter_job_one/utils/widgets_functions.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -129,10 +132,23 @@ class _PhoneNumberLoginScreenState extends State<PhoneNumberLoginScreen> {
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         print(phoneNumber);
-
-                        Navigator.pushNamed(context, otpInputRoute);
+                        dynamic code =
+                            await ApiClients().requestCode(phoneNumber);
+                        if (code is Code) {
+                          // pass phone number and code aswell - to get requestId as arguments
+                          // use phone number - for resend on the new page
+                          // use code - to send the submitted code as verify code
+                          Navigator.of(context).pushNamed(
+                            otpInputRoute,
+                            arguments: OtpScreenArguments(
+                              code: code,
+                              phoneNumber: phoneNumber,
+                            ),
+                          );
+                        }
+                        // Navigator.pushNamed(context, otpInputRoute);
                       },
                       child: const Text('Sign in'),
                     ),

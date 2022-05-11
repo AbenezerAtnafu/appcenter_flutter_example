@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_job_one/presentation/router/router_arguments.dart';
 import 'package:flutter_job_one/presentation/router/routes.dart';
 import 'package:flutter_job_one/presentation/screens/add_property_screen.dart';
 import 'package:flutter_job_one/presentation/screens/detail_screen.dart';
@@ -41,8 +42,12 @@ class AppRouter {
       //     builder: (_) => const HomeScreen(),
       //   );
       case otpInputRoute:
+        final args = settings.arguments as OtpScreenArguments;
         return MaterialPageRoute(
-          builder: (_) => const OtpInputScreen(),
+          builder: (_) => OtpInputScreen(
+            code: args.code,
+            phoneNumber: args.phoneNumber,
+          ),
         );
       case registerRoute:
         return MaterialPageRoute(

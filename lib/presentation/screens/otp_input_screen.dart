@@ -1,11 +1,20 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_job_one/service/models/Code.dart';
+import 'package:flutter_job_one/service/repository/repository.dart';
 import 'package:flutter_job_one/utils/constants.dart';
 import 'package:flutter_job_one/utils/widgets_functions.dart';
 
 class OtpInputScreen extends StatefulWidget {
-  const OtpInputScreen({Key? key}) : super(key: key);
+  final Code code;
+  final String phoneNumber;
+
+  const OtpInputScreen({
+    Key? key,
+    required this.code,
+    required this.phoneNumber,
+  }) : super(key: key);
 
   @override
   _OtpInputScreenState createState() => _OtpInputScreenState();
@@ -17,7 +26,7 @@ class _OtpInputScreenState extends State<OtpInputScreen> {
   final TextEditingController _fieldThree = TextEditingController();
   final TextEditingController _fieldFour = TextEditingController();
 
-  String? _otp;
+  String _otp = '';
 
   Timer? countdownTimer;
   Duration myDuration = Duration(seconds: 30);
@@ -33,7 +42,7 @@ class _OtpInputScreenState extends State<OtpInputScreen> {
 
   void resetTimer() {
     stopTimer();
-    setState(() => myDuration = Duration(minutes: 3));
+    setState(() => myDuration = Duration(seconds: 30));
   }
 
   void setCountDown() {
@@ -171,8 +180,11 @@ class _OtpInputScreenState extends State<OtpInputScreen> {
                         _otp =
                             '${_fieldOne.text}${_fieldTwo.text}${_fieldThree.text}${_fieldFour.text}';
                       });
-                      print('hey');
                       print(_otp);
+                      dynamic verifyUser = ApiClients().verifyCode(
+                        widget.code.requestCode!.requestId,
+                        _otp,
+                      );
                     },
                     child: const Text('Submit'),
                   ),
@@ -219,10 +231,14 @@ class _OtpInputScreenState extends State<OtpInputScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             InkWell(
-                              onTap: () {
-                                // TODO : send resend functionality here and start timer
+                              onTap: () async {
                                 resetTimer();
-                                // startTimer();
+                                dynamic code = await ApiClients().requestCode(
+                                  widget.phoneNumber,
+                                );
+                                if (code is Code) {
+                                  startTimer();
+                                }
                               },
                               child: RichText(
                                 text: TextSpan(

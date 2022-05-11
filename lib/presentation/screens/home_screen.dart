@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_job_one/presentation/router/routes.dart';
 import 'package:flutter_job_one/presentation/screens/edit_property_screen.dart';
@@ -165,13 +166,27 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class RealEstateItem extends StatelessWidget {
+class RealEstateItem extends StatefulWidget {
   final dynamic itemData;
 
-  const RealEstateItem({
+  RealEstateItem({
     Key? key,
     required this.itemData,
   }) : super(key: key);
+
+  @override
+  State<RealEstateItem> createState() => _RealEstateItemState();
+}
+
+class _RealEstateItemState extends State<RealEstateItem> {
+  // final List<String> imageList = [
+  //   'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
+  //   'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
+  //   'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
+  // ];
+
+  final carouselController = CarouselController();
+  int activeIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -181,17 +196,54 @@ class RealEstateItem extends StatelessWidget {
         Navigator.pushNamed(context, detailRoute);
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+        margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 5.0),
         child: Column(
           children: [
             Stack(
               children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
+                CarouselSlider.builder(
+                  carouselController: carouselController,
+                  itemCount: widget.itemData['image'].length,
+                  options: CarouselOptions(
+                    enlargeCenterPage: false,
+                    viewportFraction: 1,
+                    height: 250,
+                    autoPlay: false,
+                    // autoPlayInterval: Duration(seconds: 3),
+                    // enableInfiniteScroll: false,
+                    reverse: false,
+                    onPageChanged: (index, reason) =>
+                        setState(() => activeIndex = index),
                   ),
-                  child: Image.asset(itemData['image'] as String),
+                  itemBuilder: (context, i, id) {
+                    //for onTap to redirect to another screen
+                    return GestureDetector(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          border: Border.all(
+                            color: Colors.white,
+                          ),
+                        ),
+                        //ClipRRect for image border radius
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                          ),
+                          child: Image.asset(
+                            widget.itemData['image'][i],
+                            width: 500,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        // var url = widget.itemData.image[i];
+                        // print(url.toString());
+                      },
+                    );
+                  },
                 ),
                 Container(
                   width: 100,
@@ -215,11 +267,48 @@ class RealEstateItem extends StatelessWidget {
                       ),
                     ),
                   ),
-                )
+                ),
+                Positioned(
+                  top: 0,
+                  bottom: 0,
+                  left: 10,
+                  child: IconButton(
+                    onPressed: () {
+                      carouselController.previousPage();
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_ios_outlined,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  bottom: 0,
+                  right: 10,
+                  child: IconButton(
+                    onPressed: () {
+                      carouselController.nextPage();
+                    },
+                    icon: Icon(
+                      Icons.arrow_forward_ios_outlined,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 15,
+                  right: 15,
+                  child: Text(
+                    '${activeIndex + 1} / ${widget.itemData['image'].length}',
+                    style: TextStyle(
+                      color: COLOR_WHITE,
+                    ),
+                  ),
+                ),
               ],
             ),
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 25),
               padding: const EdgeInsets.only(left: 10, bottom: 10, right: 10),
               decoration: BoxDecoration(
                 border: Border.all(),
@@ -236,7 +325,7 @@ class RealEstateItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        formatCurrency(itemData['amount'] as int),
+                        formatCurrency(widget.itemData['amount'] as int),
                         style: themeData.textTheme.headline6,
                       ),
                       Row(
@@ -254,12 +343,12 @@ class RealEstateItem extends StatelessWidget {
                   ),
                   addVerticalSpace(10),
                   Text(
-                    '${itemData["address"]}',
+                    '${widget.itemData["address"]}',
                     style: themeData.textTheme.bodyText2,
                   ),
                   addVerticalSpace(10),
                   Text(
-                    "${itemData['bedrooms']} bedrooms / ${itemData['bathrooms']} bathrooms / ${itemData['sqft']} sqft",
+                    "${widget.itemData['bedrooms']} bedrooms / ${widget.itemData['bathrooms']} bathrooms / ${widget.itemData['sqft']} sqft",
                     style: themeData.textTheme.bodyText2,
                   )
                 ],

@@ -50,4 +50,38 @@ class Mutations {
       }
     ''';
   }
+
+  String requestCode(String phoneNumber) {
+    return '''
+      mutation {
+        requestCode(phoneNumber: "$phoneNumber") {
+          requestId
+          sentCode
+        }
+      }
+    ''';
+  }
+
+  String verifyCode(String? requestId, String code) {
+    return '''
+      mutation {
+        verifyCode(requestId: "$requestId", code: "$code") {
+          authenticatable {
+            email
+            id
+            name
+            phoneNumber
+            roles
+          }
+          credentials {
+            accessToken
+            client
+            expiry
+            tokenType
+            uid
+          }
+        }
+      }
+    ''';
+  }
 }
