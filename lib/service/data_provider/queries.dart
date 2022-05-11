@@ -1,25 +1,38 @@
 class Queries {
-  String fetchAllProfile() {
-    return '''
-    query{
-        properties(onlyAvailableForListing: false) {
-          shortDescription
-        }
-      }
-    ''';
-  }
-
-  String fetchProfileById(String id) {
+  String listings(int page, int limit, dynamic filter, dynamic sort) {
     return '''
       query{
-        character(id:"$id") {
-          name
-          image
-          species
-          origin{
-            dimension
+        listings(page: $page, limit: $limit, filter: $filter, sort: $sort) {
+          collection {
+            contactMechanism
+            currency{
+              name
+            }
+            from
+            id
+            isFeaturedListing
+            listedFor
+            listedOn
+            numberOfViews
+            price
+            primaryContact{
+              email
+            }
+            property{
+              id
+            }
+            secondaryContact{
+              email
+            }
+            status
+            to
           }
-            
+          metadata {
+            currentPage
+            limitValue
+            totalCount
+            totalPages
+          }
         }
       }
     ''';

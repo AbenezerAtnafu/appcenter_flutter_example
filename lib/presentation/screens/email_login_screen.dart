@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_job_one/presentation/router/routes.dart';
-import 'package:flutter_job_one/service/repository/userLogin.dart';
+import 'package:flutter_job_one/presentation/widgets/textfield_container.dart';
+import 'package:flutter_job_one/service/models/user.dart';
+import 'package:flutter_job_one/service/repository/repository.dart';
 import 'package:flutter_job_one/utils/constants.dart';
+import 'package:flutter_job_one/utils/persistent.dart';
 import 'package:flutter_job_one/utils/widgets_functions.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EmailLoginScreen extends StatefulWidget {
   const EmailLoginScreen({Key? key}) : super(key: key);
@@ -12,7 +18,11 @@ class EmailLoginScreen extends StatefulWidget {
 }
 
 class _EmailLoginScreenState extends State<EmailLoginScreen> {
+  final _formKey = GlobalKey<FormBuilderState>();
+
   final ApiClients apiClients = ApiClients();
+  bool isPasswordVisible = false;
+  String error = '';
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +30,15 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
     final ThemeData themeData = Theme.of(context);
     const double padding = 25.0;
     const sidePadding = EdgeInsets.symmetric(horizontal: padding);
+
     return SafeArea(
       child: Scaffold(
+        backgroundColor: COLOR_WHITE,
         body: SingleChildScrollView(
           child: Container(
             padding: sidePadding,
             width: size.width,
-            height: size.height,
+            height: size.height - kToolbarHeight - kBottomNavigationBarHeight,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -57,68 +69,136 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                   ),
                 ),
                 addVerticalSpace(padding * 1.5),
-                const TextFieldContainer(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.email_outlined,
-                        color: COLOR_SECONDARY,
+                FormBuilder(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      error != ''
+                          ? Align(
+                              alignment: Alignment.topLeft,
+                              child: Container(
+                                padding: EdgeInsets.only(bottom: 10),
+                                child: Text(
+                                  error,
+                                  style: themeData.textTheme.bodySmall!
+                                      .copyWith(color: Colors.redAccent),
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      TextFieldContainer(
+                        child: FormBuilderTextField(
+                          decoration: InputDecoration(
+                            icon: Icon(
+                              Icons.email_outlined,
+                              color: COLOR_SECONDARY,
+                            ),
+                            hintText: 'Email',
+                            border: InputBorder.none,
+                          ),
+                          name: 'email',
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(
+                              errorText: 'Email is required',
+                            ),
+                            FormBuilderValidators.email(),
+                          ]),
+                        ),
                       ),
-                      hintText: 'Email',
-                      border: InputBorder.none,
-                    ),
-                  ),
-                ),
-                addVerticalSpace(padding / 2),
-                const TextFieldContainer(
-                  child: TextField(
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.lock_outline_rounded,
-                        color: COLOR_SECONDARY,
+                      addVerticalSpace(padding / 2),
+                      TextFieldContainer(
+                        child: FormBuilderTextField(
+                          obscureText: isPasswordVisible,
+                          decoration: InputDecoration(
+                            icon: Icon(
+                              Icons.lock_outline_rounded,
+                              color: COLOR_SECONDARY,
+                            ),
+                            hintText: 'Password',
+                            border: InputBorder.none,
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  isPasswordVisible = !isPasswordVisible;
+                                });
+                              },
+                              icon: !isPasswordVisible
+                                  ? Icon(Icons.visibility)
+                                  : Icon(Icons.visibility_off),
+                              color: COLOR_SECONDARY,
+                            ),
+                          ),
+                          name: 'password',
+                          validator: FormBuilderValidators.compose(
+                            [
+                              FormBuilderValidators.required(
+                                errorText: 'Password is required',
+                              ),
+                              FormBuilderValidators.minLength(6,
+                                  errorText:
+                                      'Password length must be greater than 6 letters'),
+                            ],
+                          ),
+                        ),
                       ),
-                      hintText: 'Password',
-                      border: InputBorder.none,
-                      suffixIcon: Icon(
-                        Icons.visibility,
-                        color: COLOR_SECONDARY,
+                      addVerticalSpace(10),
+                      TextButton(
+                        onPressed: () {
+                          _forgotPassword();
+                        },
+                        child: Text(
+                          'Forgot Password?',
+                          style: themeData.textTheme.bodyText2!.copyWith(
+                            color: COLOR_SECONDARY,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                addVerticalSpace(4),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Forgot Password?',
-                    style: themeData.textTheme.bodyText2!.copyWith(
-                      color: COLOR_SECONDARY,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                addVerticalSpace(10),
-                Center(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size(size.width * 0.75, 50),
-                      primary: COLOR_PRIMARY,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+                      addVerticalSpace(10),
+                      Center(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: Size(size.width * 0.75, 50),
+                            primary: COLOR_PRIMARY,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                          onPressed: () async {
+                            if (_formKey.currentState!.saveAndValidate()) {
+                              String email =
+                                  _formKey.currentState!.value['email'];
+                              String password =
+                                  _formKey.currentState!.value['password'];
+                              // Navigator.pushNamed(context, navRoute);
+                              dynamic user =
+                                  await apiClients.login(email, password);
+                              if (user is String) {
+                                setState(() {
+                                  error = user;
+                                });
+                              } else if (user is User) {
+                                // print(user.userLogin!.authenticatable!.email);
+                                setState(() {
+                                  error = '';
+                                });
+                                Helper.saveUserData(user);
+                                Navigator.of(context).pushNamed(navRoute);
+                              }
+                            }
+                          },
+                          child: const Text('Sign in'),
+                        ),
                       ),
-                    ),
-                    onPressed: () {
-                      // Navigator.pushNamed(context, navRoute);
-                      apiClients.Login('email', 'password');
-                    },
-                    child: const Text('Sign in'),
+                    ],
                   ),
                 ),
                 addVerticalSpace(padding),
                 addHorizontalDividerWithText('OR'),
+                addVerticalSpace(padding),
                 Expanded(
-                  child: Center(
+                  child: Align(
+                    alignment: Alignment.topCenter,
                     child: InkWell(
                       onTap: () {
                         Navigator.pushNamed(
@@ -146,19 +226,9 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
                     ),
                   ),
                 ),
-                addVerticalSpace(10),
-                Card(
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    color: Colors.white,
-                    child: const Text(
-                      'hey',
-                    ),
-                  ),
-                ),
                 Expanded(
-                  flex: 2,
-                  child: Center(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
                     child: InkWell(
                       onTap: () {
                         Navigator.pushNamed(context, registerRoute);
@@ -190,84 +260,7 @@ class _EmailLoginScreenState extends State<EmailLoginScreen> {
   }
 }
 
-class TextFieldContainer extends StatelessWidget {
-  final Widget child;
-  final Color? color;
-  const TextFieldContainer({
-    Key? key,
-    required this.child,
-    this.color,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      width: size.width * 0.8,
-      decoration: BoxDecoration(
-        color: color ?? COLOR_GREY.withAlpha(40),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: child,
-    );
-  }
+void _forgotPassword() async {
+  if (!await launchUrl(Uri.parse('https://www.verenda.et/')))
+    throw 'Could not launch https://www.verenda.et/';
 }
-
-// const rickCharacters = '''
-//  mutation myTodo(\$title: String!, \$body: String!){
-//  createPost(
-//    input:{
-//    title: \$title
-//    body: \$body
-//  }
-//  ){
-//    id
-//    title
-//    body
-//  }
-// }
-//  ''';
-
-// const rickCharacters = '''
-//  mutation{
-//   userLogin(\$email: String!, \$password: String!) {
-//     authenticatable {
-//       email
-//       id
-//       name
-//       phoneNumber
-//       roles
-//     }
-//     credentials {
-//       accessToken
-//       client
-//       expiry
-//       tokenType
-//       uid
-//     }
-//   }
-// }
-//  ''';
-// const rickCharacters = '''
-//  mutation{
-//   userLogin(\$email: String!, \$password: String!) {
-//     authenticatable {
-//       email
-//       id
-//       name
-//       phoneNumber
-//       roles
-//     }
-//     credentials {
-//       accessToken
-//       client
-//       expiry
-//       tokenType
-//       uid
-//     }
-//   }
-// }
-//  ''';
-///THIS IS A SAMPLE FOR MAKING MUTABLE REQUEST
-///login

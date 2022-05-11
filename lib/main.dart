@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_job_one/presentation/screens/email_login_screen.dart';
+import 'package:flutter_job_one/presentation/router/app_router.dart';
+import 'package:flutter_job_one/presentation/router/routes.dart';
 import 'package:flutter_job_one/service/data_provider/graphql_config.dart';
 import 'package:flutter_job_one/utils/constants.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -34,13 +35,12 @@ class MyApp extends StatelessWidget {
     return GraphQLProvider(
       client: client,
       child: MaterialApp(
-        title: "Verenda.et",
+        title: 'Verenda.et',
         theme: ThemeData(
           primaryColor: COLOR_PRIMARY,
         ),
-        // initialRoute: onBoardingRoute,
-        // onGenerateRoute: AppRouter.generageRoute,
-        home: const EmailLoginScreen(),
+        initialRoute: onBoardingRoute,
+        onGenerateRoute: AppRouter.generageRoute,
       ),
     );
   }

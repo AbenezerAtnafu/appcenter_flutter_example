@@ -22,56 +22,86 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
     const sidePadding = EdgeInsets.symmetric(horizontal: padding);
     return SafeArea(
       child: Scaffold(
+        backgroundColor: COLOR_WHITE,
+        appBar: AppBar(
+          toolbarHeight: 80,
+          backgroundColor: COLOR_WHITE,
+          elevation: 0.0,
+          leadingWidth: 100,
+          centerTitle: true,
+          title: Text(
+            'My Favourites',
+            style: TextStyle(color: COLOR_BLACK),
+          ),
+          // leading: InkWell(
+          //   onTap: () {
+          //     Navigator.pop(context);
+          //   },
+          //   child: Container(
+          //     margin: EdgeInsets.only(left: 10, top: 10),
+          //     decoration: BoxDecoration(
+          //       color: COLOR_GREY.withAlpha(20),
+          //       shape: BoxShape.circle,
+          //     ),
+          //     width: 50,
+          //     height: 50,
+          //     child: const Icon(
+          //       Icons.arrow_back_ios_new_rounded,
+          //       color: COLOR_BLACK,
+          //     ),
+          //   ),
+          // ),
+        ),
         body: Container(
           padding: sidePadding,
           width: size.width,
-          height: size.height,
+          height: size.height - kToolbarHeight - kBottomNavigationBarHeight,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              addVerticalSpace(padding),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: COLOR_GREY.withAlpha(40),
-                        shape: BoxShape.circle,
-                      ),
-                      width: 60,
-                      height: 60,
-                      child: const Icon(
-                        Icons.arrow_back_ios_new_rounded,
-                        color: COLOR_BLACK,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    'My favourites',
-                    style: themeData.textTheme.headline6,
-                  ),
-                  if (FAVOURITE_DATA.isNotEmpty)
-                    Container(
-                      decoration: BoxDecoration(
-                        color: COLOR_GREY.withAlpha(40),
-                        shape: BoxShape.circle,
-                      ),
-                      width: 60,
-                      height: 60,
-                      child: const Icon(
-                        Icons.delete_outline,
-                        color: COLOR_BLACK,
-                      ),
-                    )
-                  else
-                    Container(),
-                ],
-              ),
-              addVerticalSpace(padding * 2),
+              // addVerticalSpace(padding),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     InkWell(
+              //       onTap: () {
+              //         Navigator.pop(context);
+              //       },
+              //       child: Container(
+              //         decoration: BoxDecoration(
+              //           color: COLOR_GREY.withAlpha(40),
+              //           shape: BoxShape.circle,
+              //         ),
+              //         width: 60,
+              //         height: 60,
+              //         child: const Icon(
+              //           Icons.arrow_back_ios_new_rounded,
+              //           color: COLOR_BLACK,
+              //         ),
+              //       ),
+              //     ),
+              //     Text(
+              //       'My favourites',
+              //       style: themeData.textTheme.headline6,
+              //     ),
+              //     if (FAVOURITE_DATA.isNotEmpty)
+              //       Container(
+              //         decoration: BoxDecoration(
+              //           color: COLOR_GREY.withAlpha(40),
+              //           shape: BoxShape.circle,
+              //         ),
+              //         width: 60,
+              //         height: 60,
+              //         child: const Icon(
+              //           Icons.delete_outline,
+              //           color: COLOR_BLACK,
+              //         ),
+              //       )
+              //     else
+              //       Container(),
+              //   ],
+              // ),
+              // addVerticalSpace(padding * 2),
               Text(
                 '${FAVOURITE_DATA.length} Properties',
                 style: themeData.textTheme.headline6,
@@ -197,7 +227,7 @@ class RealEstateItem extends StatelessWidget {
                   children: [
                     addVerticalSpace(15.0),
                     Text(
-                      formatCurrency(itemData["amount"] as int),
+                      formatCurrency(itemData['amount'] as int),
                       style: themeData.textTheme.headline6,
                     ),
                     addVerticalSpace(10),

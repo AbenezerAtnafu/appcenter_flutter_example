@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_job_one/presentation/router/routes.dart';
-import 'package:flutter_job_one/presentation/screens/email_login_screen.dart';
+import 'package:flutter_job_one/presentation/widgets/textfield_container.dart';
 import 'package:flutter_job_one/utils/constants.dart';
 import 'package:flutter_job_one/utils/widgets_functions.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -30,41 +30,43 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     const sidePadding = EdgeInsets.symmetric(horizontal: padding);
     return SafeArea(
       child: Scaffold(
+        backgroundColor: COLOR_WHITE,
+        appBar: AppBar(
+          toolbarHeight: 80,
+          backgroundColor: COLOR_WHITE,
+          elevation: 0.0,
+          leadingWidth: 100,
+          centerTitle: true,
+          title: Text(
+            'Edit Profile',
+            style: TextStyle(color: COLOR_BLACK),
+          ),
+          // leading: InkWell(
+          //   onTap: () {
+          //     Navigator.pop(context);
+          //   },
+          //   child: Container(
+          //     margin: EdgeInsets.only(left: 10, top: 10),
+          //     decoration: BoxDecoration(
+          //       color: COLOR_GREY.withAlpha(20),
+          //       shape: BoxShape.circle,
+          //     ),
+          //     width: 50,
+          //     height: 50,
+          //     child: const Icon(
+          //       Icons.arrow_back_ios_new_rounded,
+          //       color: COLOR_BLACK,
+          //     ),
+          //   ),
+          // ),
+        ),
         body: SingleChildScrollView(
           child: Container(
             padding: sidePadding,
             width: size.width,
-            height: size.height,
+            height: size.height - kToolbarHeight - kBottomNavigationBarHeight,
             child: Column(
               children: [
-                addVerticalSpace(padding),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: COLOR_GREY.withAlpha(40),
-                          shape: BoxShape.circle,
-                        ),
-                        width: 60,
-                        height: 60,
-                        child: const Icon(
-                          Icons.arrow_back_ios_new_rounded,
-                          color: COLOR_BLACK,
-                        ),
-                      ),
-                    ),
-                    Text(
-                      'Edit Profile',
-                      style: themeData.textTheme.headline6,
-                    ),
-                    Container()
-                  ],
-                ),
                 addVerticalSpace(padding),
                 const TextFieldContainer(
                   child: TextField(

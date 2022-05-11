@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_job_one/presentation/screens/email_login_screen.dart';
-import 'package:flutter_job_one/presentation/screens/nav_screen.dart';
+import 'package:flutter_job_one/presentation/router/routes.dart';
+import 'package:flutter_job_one/presentation/widgets/textfield_container.dart';
 import 'package:flutter_job_one/utils/constants.dart';
 import 'package:flutter_job_one/utils/widgets_functions.dart';
 import 'package:image_picker/image_picker.dart';
@@ -48,7 +48,7 @@ class _AddPropertyScreenState extends State<AddPropertyScreen> {
             physics: const NeverScrollableScrollPhysics(),
             controller: controller,
             onPageChanged: (num) {
-              debugPrint("Current page number is $num");
+              debugPrint('Current page number is $num');
               _curr = num;
             },
             children: _list,
@@ -314,10 +314,10 @@ class _StepTwoFormState extends State<StepTwoForm> {
         widget.imagefiles = pickedfiles;
         setState(() {});
       } else {
-        print("No image is selected.");
+        print('No image is selected.');
       }
     } catch (e) {
-      print("error while picking file.");
+      print('error while picking file.');
     }
   }
 
@@ -1036,14 +1036,9 @@ class _StepThreeFormState extends State<StepThreeForm> {
                                                   primary: COLOR_PRIMARY,
                                                 ),
                                                 onPressed: () {
-                                                  Navigator.pushReplacement(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (BuildContext
-                                                              context) =>
-                                                          NavScreen(),
-                                                    ),
-                                                  );
+                                                  Navigator.of(context)
+                                                      .pushReplacementNamed(
+                                                          navRoute);
                                                 },
                                                 child: const Text('Finish'),
                                               ),

@@ -13,8 +13,8 @@ class PhoneNumberSignupScreen extends StatefulWidget {
 }
 
 class _PhoneNumberSignupScreenState extends State<PhoneNumberSignupScreen> {
-  final GlobalKey<FormState> formkey = GlobalKey<FormState>();
-  final TextEditingController controller = TextEditingController();
+  String phoneNumber = '';
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -23,36 +23,44 @@ class _PhoneNumberSignupScreenState extends State<PhoneNumberSignupScreen> {
     const sidePadding = EdgeInsets.symmetric(horizontal: padding);
     return SafeArea(
       child: Scaffold(
+        backgroundColor: COLOR_WHITE,
+        appBar: AppBar(
+          toolbarHeight: 80,
+          backgroundColor: COLOR_WHITE,
+          elevation: 0.0,
+          leadingWidth: 100,
+          leading: InkWell(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Container(
+              margin: EdgeInsets.only(left: 10, top: 10),
+              decoration: BoxDecoration(
+                color: COLOR_GREY.withAlpha(20),
+                shape: BoxShape.circle,
+              ),
+              width: 50,
+              height: 50,
+              child: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: COLOR_BLACK,
+              ),
+            ),
+          ),
+        ),
         body: SingleChildScrollView(
           child: Container(
             padding: sidePadding,
             width: size.width,
-            height: size.height,
+            height: size.height - kToolbarHeight - kBottomNavigationBarHeight,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                addVerticalSpace(padding),
-                InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: COLOR_GREY.withAlpha(40),
-                      shape: BoxShape.circle,
-                    ),
-                    width: 60,
-                    height: 60,
-                    child: const Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                      color: COLOR_BLACK,
-                    ),
-                  ),
-                ),
                 addVerticalSpace(padding * 2),
                 RichText(
                   text: TextSpan(
-                    text: "Create your",
+                    text: 'Create your',
                     style: themeData.textTheme.headline4!.copyWith(
                       color: COLOR_SECONDARY,
                     ),
@@ -75,33 +83,32 @@ class _PhoneNumberSignupScreenState extends State<PhoneNumberSignupScreen> {
                   ),
                 ),
                 addVerticalSpace(padding),
-                Form(
-                  key: formkey,
-                  child: IntlPhoneField(
-                    controller: controller,
-                    flagsButtonPadding: const EdgeInsets.only(left: 10),
-                    dropdownIconPosition: IconPosition.trailing,
-                    decoration: InputDecoration(
-                      hintText: 'Mobile Number',
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
-                          color: COLOR_GREY.withAlpha(80),
-                          width: 0.0,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: const BorderSide(
-                          color: COLOR_PRIMARY,
-                        ),
+                IntlPhoneField(
+                  flagsButtonPadding: const EdgeInsets.only(left: 10),
+                  dropdownIconPosition: IconPosition.trailing,
+                  decoration: InputDecoration(
+                    hintText: 'Mobile Number',
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(
+                        color: COLOR_GREY.withAlpha(80),
+                        width: 0.0,
                       ),
                     ),
-                    initialCountryCode: 'ET',
-                    onChanged: (phone) {
-                      debugPrint(phone.completeNumber);
-                    },
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(
+                        color: COLOR_PRIMARY,
+                      ),
+                    ),
                   ),
+                  initialCountryCode: 'ET',
+                  onChanged: (phone) {
+                    setState(() {
+                      phoneNumber = phone.completeNumber;
+                    });
+                  },
+                  // onSaved: (phone) => {print(phone)},
                 ),
                 addVerticalSpace(padding / 2),
                 Text(
@@ -111,28 +118,28 @@ class _PhoneNumberSignupScreenState extends State<PhoneNumberSignupScreen> {
                   ),
                 ),
                 addVerticalSpace(padding * 2),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(size.width * 0.75, 70),
-                        primary: COLOR_PRIMARY,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
+                Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(size.width * 0.75, 60),
+                      primary: COLOR_PRIMARY,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                      onPressed: () {
-                        Navigator.pushNamed(context, otpInputRoute);
-                      },
-                      child: const Text('Send code'),
                     ),
-                  ],
+                    onPressed: () {
+                      print(phoneNumber);
+                      Navigator.pushNamed(context, otpInputRoute);
+                    },
+                    child: const Text('Send code'),
+                  ),
                 ),
-                addVerticalSpace(padding),
+                addVerticalSpace(padding * 2),
                 addHorizontalDividerWithText('OR'),
+                addVerticalSpace(padding * 2),
                 Expanded(
-                  child: Center(
+                  child: Align(
+                    alignment: Alignment.topCenter,
                     child: InkWell(
                       onTap: () {
                         Navigator.pushNamed(context, registerRoute);
@@ -146,6 +153,30 @@ class _PhoneNumberSignupScreenState extends State<PhoneNumberSignupScreen> {
                           children: <TextSpan>[
                             TextSpan(
                               text: ' Email',
+                              style: themeData.textTheme.bodyText2!.copyWith(
+                                color: COLOR_PRIMARY,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Center(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, phoneNumberLoginRoute);
+                      },
+                      child: RichText(
+                        text: TextSpan(
+                          text: 'Already have an account?',
+                          style: themeData.textTheme.bodyText2,
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: ' Login',
                               style: themeData.textTheme.bodyText2!.copyWith(
                                 color: COLOR_PRIMARY,
                                 fontWeight: FontWeight.bold,

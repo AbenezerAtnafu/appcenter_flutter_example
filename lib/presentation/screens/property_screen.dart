@@ -27,188 +27,155 @@ class _PropertyScreenState extends State<PropertyScreen>
 
     return SafeArea(
       child: Scaffold(
+        backgroundColor: COLOR_WHITE,
+        appBar: AppBar(
+          toolbarHeight: 80,
+          backgroundColor: COLOR_WHITE,
+          elevation: 0.0,
+          leadingWidth: 100,
+          centerTitle: true,
+          title: Text(
+            'My Properties',
+            style: TextStyle(color: COLOR_BLACK),
+          ),
+        ),
         body: SizedBox(
           width: size.width,
-          height: size.height,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                addVerticalSpace(padding),
-                Padding(
-                  padding: sidePadding,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: COLOR_GREY.withAlpha(40),
-                            shape: BoxShape.circle,
-                          ),
-                          width: 60,
-                          height: 60,
-                          child: const Icon(
-                            Icons.arrow_back_ios_new_rounded,
-                            color: COLOR_BLACK,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        'My favourites',
-                        style: themeData.textTheme.headline6,
-                      ),
-                      Container(),
-                    ],
-                  ),
+          height: size.height - kToolbarHeight - kBottomNavigationBarHeight,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Text(
+                  'Michael Solomon',
+                  style: themeData.textTheme.headline6,
                 ),
-                addVerticalSpace(padding * 2),
-                Center(
-                  child: Text(
-                    'Michael Solomon',
-                    style: themeData.textTheme.headline6,
-                  ),
+              ),
+              addVerticalSpace(10),
+              Center(
+                child: Text(
+                  'se.michael.solomon@gmail.com',
+                  style: themeData.textTheme.bodyText2,
                 ),
-                addVerticalSpace(10),
-                Center(
-                  child: Text(
-                    'se.michael.solomon@gmail.com',
-                    style: themeData.textTheme.bodyText2,
-                  ),
+              ),
+              addVerticalSpace(padding * 2),
+              Container(
+                margin: sidePadding,
+                padding: const EdgeInsets.all(10.0),
+                height: 70,
+                decoration: BoxDecoration(
+                  color: COLOR_GREY.withAlpha(40),
+                  borderRadius: BorderRadius.circular(40),
                 ),
-                addVerticalSpace(padding * 2),
-                Container(
-                  margin: sidePadding,
-                  padding: const EdgeInsets.all(10.0),
-                  height: 70,
-                  decoration: BoxDecoration(
-                    color: COLOR_GREY.withAlpha(40),
-                    borderRadius: BorderRadius.circular(40),
+                child: TabBar(
+                  controller: _tabController,
+                  labelColor: COLOR_SECONDARY,
+                  unselectedLabelColor: COLOR_SECONDARY.withAlpha(100),
+                  indicator: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    color: COLOR_WHITE,
                   ),
-                  child: TabBar(
-                    controller: _tabController,
-                    labelColor: COLOR_SECONDARY,
-                    unselectedLabelColor: COLOR_SECONDARY.withAlpha(100),
-                    indicator: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: COLOR_WHITE,
-                    ),
-                    tabs: const [
-                      Tab(child: Text('Active')),
-                      Tab(child: Text('In Review')),
-                      Tab(child: Text('Draft')),
-                    ],
-                  ),
+                  tabs: const [
+                    Tab(child: Text('Active')),
+                    Tab(child: Text('In Review')),
+                    Tab(child: Text('Draft')),
+                  ],
                 ),
-                addVerticalSpace(padding / 2),
-                const Padding(
-                  padding: sidePadding,
-                  child: Text('1 listing'),
-                ),
-                Container(
-                  width: double.maxFinite,
-                  height: 400,
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: padding,
-                    vertical: 10,
-                  ),
+              ),
+              addVerticalSpace(padding / 2),
+              const Padding(
+                padding: sidePadding,
+                child: Text('1 listing'),
+              ),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: padding),
                   child: TabBarView(
                     controller: _tabController,
                     children: [
-                      Expanded(
-                        child: ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: RE_DATA.length,
-                          itemBuilder: (BuildContext context, int index) =>
-                              RealEstateItem(
-                            itemData: RE_DATA[index],
-                          ),
+                      ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: RE_DATA.length,
+                        itemBuilder: (BuildContext context, int index) =>
+                            RealEstateItem(
+                          itemData: RE_DATA[index],
                         ),
                       ),
-                      Expanded(
-                        child: FAVOURITE_DATA.isNotEmpty
-                            ? ListView.builder(
-                                physics: const BouncingScrollPhysics(),
-                                itemCount: FAVOURITE_DATA.length,
-                                itemBuilder:
-                                    (BuildContext context, int index) =>
-                                        RealEstateItem(
-                                  itemData: FAVOURITE_DATA[index],
-                                ),
-                              )
-                            : Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            blurRadius: 60,
-                                            color: COLOR_PRIMARY,
-                                            spreadRadius: 15,
-                                          )
-                                        ],
-                                      ),
-                                      child: const CircleAvatar(
-                                        radius: 30.0,
-                                        backgroundColor: COLOR_PRIMARY,
-                                        child: Icon(
-                                          Icons.add,
-                                          color: COLOR_WHITE,
-                                        ),
-                                      ),
-                                    ),
-                                    addVerticalSpace(padding * 2),
-                                    RichText(
-                                      text: TextSpan(
-                                        text: 'In Review is',
-                                        style: themeData.textTheme.headline5!
-                                            .copyWith(
-                                          color: COLOR_SECONDARY,
-                                        ),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: ' empty',
-                                            style: themeData
-                                                .textTheme.headline5!
-                                                .copyWith(
-                                              color: COLOR_PRIMARY,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset('assets/images/coming_soon.png'),
-                            addVerticalSpace(padding),
-                            Text(
-                              'Coming soon!',
-                              style: themeData.textTheme.headline4!.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: COLOR_PRIMARY,
+                      FAVOURITE_DATA.isNotEmpty
+                          ? ListView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              itemCount: FAVOURITE_DATA.length,
+                              itemBuilder: (BuildContext context, int index) =>
+                                  RealEstateItem(
+                                itemData: FAVOURITE_DATA[index],
                               ),
                             )
-                          ],
-                        ),
+                          : Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 60,
+                                          color: COLOR_PRIMARY,
+                                          spreadRadius: 15,
+                                        )
+                                      ],
+                                    ),
+                                    child: const CircleAvatar(
+                                      radius: 30.0,
+                                      backgroundColor: COLOR_PRIMARY,
+                                      child: Icon(
+                                        Icons.add,
+                                        color: COLOR_WHITE,
+                                      ),
+                                    ),
+                                  ),
+                                  addVerticalSpace(padding * 2),
+                                  RichText(
+                                    text: TextSpan(
+                                      text: 'In Review is',
+                                      style: themeData.textTheme.headline5!
+                                          .copyWith(
+                                        color: COLOR_SECONDARY,
+                                      ),
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                          text: ' empty',
+                                          style: themeData.textTheme.headline5!
+                                              .copyWith(
+                                            color: COLOR_PRIMARY,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/images/coming_soon.png'),
+                          addVerticalSpace(padding),
+                          Text(
+                            'Coming soon',
+                            style: themeData.textTheme.headline4!.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: COLOR_PRIMARY,
+                            ),
+                          )
+                        ],
                       ),
                     ],
                   ),
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
         ),
       ),
@@ -278,7 +245,7 @@ class RealEstateItem extends StatelessWidget {
                 children: [
                   addVerticalSpace(15.0),
                   Text(
-                    formatCurrency(itemData["amount"] as int),
+                    formatCurrency(itemData['amount'] as int),
                     style: themeData.textTheme.headline6,
                   ),
                   addHorizontalSpace(10),

@@ -1,27 +1,42 @@
-import "package:flutter/material.dart";
-import "package:graphql_flutter/graphql_flutter.dart";
+import 'package:flutter/material.dart';
+import 'package:flutter_job_one/utils/custom_header.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 class GraphQLConfig {
-  static String token = "your can get it from a secured storage";
+  // TODO: get the token from localstorage
+  // static String token = 'Px5OR2ps40MtsRX_BSvkgw';
+  static String token = 'Px5OR2ps40MtsRX_BSvkgw';
+  static String clientId = 'qjukJdK7FYnbx16qPHAmYQ';
+  static String uid = 'se.michael.solomon@gmail.com';
+  static String expiry = '165339749';
+  static String tokenType = 'Bearer';
+
+  // TODO: move the link to environment varibale
   static HttpLink httpLink = HttpLink(
     'https://staging-verenda.herokuapp.com/graphql/',
   );
 
-  ///if you want to pass token
   static ValueNotifier<GraphQLClient> graphInit() {
-    // We're using HiveStore for persistence,
-    // so we need to initialize Hive.
-
-    final AuthLink authLink = AuthLink(
-      getToken: () async => 'Bearer $token',
-    );
+    // final AuthLink authLink = AuthLink(
+    //   getToken: () async => 'Bearer $token',
+    // );
+    // Helper.getUserData().then((value) {
+    //   print(value.userLogin!.authenticatable!.email);
+    // });
+    CustomAuthLink authLink = CustomAuthLink(
+        getHeaders: () => {
+              'access_token': '$token',
+              'client': '$clientId',
+              'expiry': '$expiry',
+              'tokenType': '$tokenType',
+              'uid': '$uid',
+            });
 
     final Link link = authLink.concat(httpLink);
 
     final ValueNotifier<GraphQLClient> client = ValueNotifier(
       GraphQLClient(
         link: link,
-        // The default store is the InMemoryStore, which does NOT persist to disk
         cache: GraphQLCache(
           store: HiveStore(),
         ),
@@ -32,9 +47,18 @@ class GraphQLConfig {
   }
 
   GraphQLClient clientToQuery() {
-    final AuthLink authLink = AuthLink(
-      getToken: () async => 'Bearer $token',
-    );
+    // final AuthLink authLink = AuthLink(
+    //   getToken: () async => 'Bearer $token',
+    // );
+
+    CustomAuthLink authLink = CustomAuthLink(
+        getHeaders: () => {
+              'access_token': '$token',
+              'client': '$clientId',
+              'expiry': '$expiry',
+              'tokenType': '$tokenType',
+              'uid': '$uid',
+            });
 
     final Link link = authLink.concat(httpLink);
     return GraphQLClient(

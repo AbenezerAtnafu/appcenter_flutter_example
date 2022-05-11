@@ -12,6 +12,8 @@ class PhoneNumberLoginScreen extends StatefulWidget {
 }
 
 class _PhoneNumberLoginScreenState extends State<PhoneNumberLoginScreen> {
+  String phoneNumber = '';
+
   final GlobalKey<FormState> formkey = GlobalKey<FormState>();
   final TextEditingController controller = TextEditingController();
   @override
@@ -22,32 +24,39 @@ class _PhoneNumberLoginScreenState extends State<PhoneNumberLoginScreen> {
     const sidePadding = EdgeInsets.symmetric(horizontal: padding);
     return SafeArea(
       child: Scaffold(
+        backgroundColor: COLOR_WHITE,
+        appBar: AppBar(
+          toolbarHeight: 80,
+          backgroundColor: COLOR_WHITE,
+          elevation: 0.0,
+          leadingWidth: 100,
+          leading: InkWell(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Container(
+              margin: EdgeInsets.only(left: 10, top: 10),
+              decoration: BoxDecoration(
+                color: COLOR_GREY.withAlpha(20),
+                shape: BoxShape.circle,
+              ),
+              width: 50,
+              height: 50,
+              child: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: COLOR_BLACK,
+              ),
+            ),
+          ),
+        ),
         body: SingleChildScrollView(
           child: Container(
             padding: sidePadding,
             width: size.width,
-            height: size.height,
+            height: size.height - kToolbarHeight - kBottomNavigationBarHeight,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                addVerticalSpace(padding),
-                InkWell(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: COLOR_GREY.withAlpha(40),
-                      shape: BoxShape.circle,
-                    ),
-                    width: 60,
-                    height: 60,
-                    child: const Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                      color: COLOR_BLACK,
-                    ),
-                  ),
-                ),
                 addVerticalSpace(padding * 2),
                 RichText(
                   text: TextSpan(
@@ -74,33 +83,32 @@ class _PhoneNumberLoginScreenState extends State<PhoneNumberLoginScreen> {
                   ),
                 ),
                 addVerticalSpace(padding),
-                Form(
-                  key: formkey,
-                  child: IntlPhoneField(
-                    controller: controller,
-                    flagsButtonPadding: const EdgeInsets.only(left: 10),
-                    dropdownIconPosition: IconPosition.trailing,
-                    decoration: InputDecoration(
-                      hintText: 'Mobile Number',
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(
-                          color: COLOR_GREY.withAlpha(80),
-                          width: 0.0,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: const BorderSide(
-                          color: COLOR_PRIMARY,
-                        ),
+                IntlPhoneField(
+                  flagsButtonPadding: const EdgeInsets.only(left: 10),
+                  dropdownIconPosition: IconPosition.trailing,
+                  decoration: InputDecoration(
+                    hintText: 'Mobile Number',
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(
+                        color: COLOR_GREY.withAlpha(80),
+                        width: 0.0,
                       ),
                     ),
-                    initialCountryCode: 'ET',
-                    onChanged: (phone) {
-                      debugPrint(phone.completeNumber);
-                    },
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(
+                        color: COLOR_PRIMARY,
+                      ),
+                    ),
                   ),
+                  initialCountryCode: 'ET',
+                  onChanged: (phone) {
+                    setState(() {
+                      phoneNumber = phone.completeNumber;
+                    });
+                  },
+                  // onSaved: (phone) => {print(phone)},
                 ),
                 addVerticalSpace(padding / 2),
                 Text(
@@ -122,6 +130,8 @@ class _PhoneNumberLoginScreenState extends State<PhoneNumberLoginScreen> {
                         ),
                       ),
                       onPressed: () {
+                        print(phoneNumber);
+
                         Navigator.pushNamed(context, otpInputRoute);
                       },
                       child: const Text('Sign in'),
@@ -130,8 +140,10 @@ class _PhoneNumberLoginScreenState extends State<PhoneNumberLoginScreen> {
                 ),
                 addVerticalSpace(padding),
                 addHorizontalDividerWithText('OR'),
+                addVerticalSpace(padding),
                 Expanded(
-                  child: Center(
+                  child: Align(
+                    alignment: Alignment.topCenter,
                     child: InkWell(
                       onTap: () {
                         Navigator.pushNamed(context, emailLoginRoute);
@@ -157,7 +169,6 @@ class _PhoneNumberLoginScreenState extends State<PhoneNumberLoginScreen> {
                   ),
                 ),
                 Expanded(
-                  flex: 2,
                   child: Center(
                     child: InkWell(
                       onTap: () {

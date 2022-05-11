@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_job_one/service/data_provider/gql_client.dart';
-import 'package:flutter_job_one/service/data_provider/queries.dart';
-import 'package:gql/language.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:flutter_job_one/presentation/router/routes.dart';
+import 'package:flutter_job_one/presentation/screens/edit_property_screen.dart';
+import 'package:flutter_job_one/sample_data.dart';
+import 'package:flutter_job_one/utils/constants.dart';
+import 'package:flutter_job_one/utils/custom_functions.dart';
+import 'package:flutter_job_one/utils/widgets_functions.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -12,34 +14,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final GraphQLConfiguration _graphQLConfiguration = GraphQLConfiguration();
-  final Queries _query = Queries();
-  List profileList = List.empty();
-
   @override
   void initState() {
+    // print('here');
+    // ApiClients().listings(1, 10, {}, 'PRICE_DESC');
+    // print(Helper.getUserData());
     super.initState();
-    fetchProfile();
-  }
-
-  Future fetchProfile() async {
-    final GraphQLClient _client = _graphQLConfiguration.myGQLClient();
-
-    final QueryResult result = await _client.query(
-      QueryOptions(
-        document: parseString(
-          _query.fetchAllProfile(),
-        ),
-      ),
-    );
-    if (result.hasException) {
-      print(result.exception);
-    } else if (!result.hasException) {
-      print(result.data);
-      setState(() {
-        profileList = result.data?['allListings'] as List;
-      });
-    }
   }
 
   @override
@@ -53,16 +33,266 @@ class _HomeScreenState extends State<HomeScreen> {
         body: SizedBox(
           width: size.width,
           height: size.height,
-          child: profileList.isEmpty
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text('hey'),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: size.width,
+                height: size.height * 0.2,
+                color: COLOR_PRIMARY,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextFieldContainer(
+                      color: COLOR_WHITE,
+                      child: TextField(
+                        decoration: InputDecoration(
+                            icon: Icon(
+                              Icons.search_outlined,
+                              color: COLOR_PRIMARY,
+                            ),
+                            hintText: 'Enter address',
+                            border: InputBorder.none,
+                            suffixIcon: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.change_circle,
+                                  color: COLOR_PRIMARY,
+                                ),
+                                addHorizontalSpace(6),
+                                Icon(
+                                  Icons.filter_alt_outlined,
+                                  color: COLOR_PRIMARY,
+                                )
+                              ],
+                            )),
+                      ),
+                    ),
+                    addVerticalSpace(15),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: padding - 15,
+                      ),
+                      child: Row(
+                        children: ['All', 'Rent', 'Buy']
+                            .map(
+                              (filter) => FilterOptionButton(
+                                text: filter,
+                                isSelected: filter == 'All',
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
                   ],
                 ),
+              ),
+              addVerticalSpace(padding),
+              Expanded(
+                child: RE_DATA.isEmpty
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 60,
+                                    color: COLOR_PRIMARY,
+                                    spreadRadius: 15,
+                                  )
+                                ],
+                              ),
+                              child: const CircleAvatar(
+                                radius: 30.0,
+                                backgroundColor: COLOR_PRIMARY,
+                                child: Icon(
+                                  Icons.add,
+                                  color: COLOR_WHITE,
+                                ),
+                              ),
+                            ),
+                            addVerticalSpace(padding * 2),
+                            RichText(
+                              text: TextSpan(
+                                text: 'Your favourite page is',
+                                style: themeData.textTheme.headline5!.copyWith(
+                                  color: COLOR_SECONDARY,
+                                ),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: ' empty',
+                                    style:
+                                        themeData.textTheme.headline5!.copyWith(
+                                      color: COLOR_PRIMARY,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            addVerticalSpace(30),
+                            Padding(
+                              padding: sidePadding * 2,
+                              child: Text(
+                                'Click add button above to start exploring and choose your favourite properites.',
+                                style: themeData.textTheme.bodyText2!.copyWith(
+                                  color: COLOR_SECONDARY,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: RE_DATA.length,
+                        itemBuilder: (BuildContext context, int index) =>
+                            RealEstateItem(
+                          itemData: RE_DATA[index],
+                        ),
+                      ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class RealEstateItem extends StatelessWidget {
+  final dynamic itemData;
+
+  const RealEstateItem({
+    Key? key,
+    required this.itemData,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData themeData = Theme.of(context);
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, detailRoute);
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                  ),
+                  child: Image.asset(itemData['image'] as String),
+                ),
+                Container(
+                  width: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.orangeAccent,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 4,
+                    horizontal: 10,
+                  ),
+                  margin: const EdgeInsets.only(
+                    top: 8,
+                    left: 8,
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Featured',
+                      style: themeData.textTheme.bodyText1!.copyWith(
+                        color: COLOR_WHITE,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 25),
+              padding: const EdgeInsets.only(left: 10, bottom: 10, right: 10),
+              decoration: BoxDecoration(
+                border: Border.all(),
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  addVerticalSpace(15.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        formatCurrency(itemData['amount'] as int),
+                        style: themeData.textTheme.headline6,
+                      ),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.favorite_outline,
+                          ),
+                          addHorizontalSpace(10),
+                          const Icon(
+                            Icons.share_outlined,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  addVerticalSpace(10),
+                  Text(
+                    '${itemData["address"]}',
+                    style: themeData.textTheme.bodyText2,
+                  ),
+                  addVerticalSpace(10),
+                  Text(
+                    "${itemData['bedrooms']} bedrooms / ${itemData['bathrooms']} bathrooms / ${itemData['sqft']} sqft",
+                    style: themeData.textTheme.bodyText2,
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FilterOptionButton extends StatelessWidget {
+  final String text;
+  final bool isSelected;
+
+  const FilterOptionButton({required this.text, this.isSelected = false});
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        margin: const EdgeInsets.only(left: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xff178DD0) : COLOR_WHITE,
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Text(
+          text,
+          style: TextStyle(
+            color: isSelected ? COLOR_WHITE : COLOR_PRIMARY,
+          ),
         ),
       ),
     );
