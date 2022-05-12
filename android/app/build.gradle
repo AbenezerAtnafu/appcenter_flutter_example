@@ -44,7 +44,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.example.appcenter_example"
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -57,6 +57,27 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+    flavorDimensions "dummy", "distribute"
+    productFlavors {
+        dummyFoo {
+            dimension "dummy"
+        }
+        dummyBar {
+            dimension "dummy"
+        }
+        appCenter {
+            dimension "distribute"
+        }
+
+        googlePlay {
+            dimension "distribute"
+        }
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+        checkReleaseBuilds false
+    }
+
 }
 
 flutter {
