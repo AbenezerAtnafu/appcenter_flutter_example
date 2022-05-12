@@ -1,21 +1,20 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:appcenter/appcenter.dart';
-import 'package:appcenter_analytics/appcenter_analytics.dart';
-import 'package:appcenter_crashes/appcenter_crashes.dart';
+// import 'package:appcenter/appcenter.dart';
+// import 'package:appcenter_analytics/appcenter_analytics.dart';
+// import 'package:appcenter_crashes/appcenter_crashes.dart';
 
 void main() {
   runApp(const MyApp());
-  initAppCenter();
+  // initAppCenter();
 }
 
-void initAppCenter() async {
-  final ios = defaultTargetPlatform == TargetPlatform.iOS;
+// void initAppCenter() async {
+//   final ios = defaultTargetPlatform == TargetPlatform.iOS;
 
-  var app_secret = ios ? "123cfac9-123b-123a-123f-123273416a48" : "27742f15-6e67-478d-bcbb-a7677af56b6f";
+//   var app_secret = ios ? "123cfac9-123b-123a-123f-123273416a48" : "27742f15-6e67-478d-bcbb-a7677af56b6f";
 
-  await AppCenter.start(app_secret, [AppCenterAnalytics.id, AppCenterCrashes.id]);
-}
+//   await AppCenter.start(app_secret, [AppCenterAnalytics.id, AppCenterCrashes.id]);
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
