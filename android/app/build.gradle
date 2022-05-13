@@ -63,22 +63,7 @@ android {
             signingConfig signingConfigs.release
         }
     }
-    flavorDimensions "dummy", "distribute"
-    productFlavors {
-        dummyFoo {
-            dimension "dummy"
-        }
-        dummyBar {
-            dimension "dummy"
-        }
-        appCenter {
-            dimension "distribute"
-        }
-
-        googlePlay {
-            dimension "distribute"
-        }
-    }
+    
     lintOptions {
         disable 'InvalidPackage'
         checkReleaseBuilds false
@@ -91,5 +76,6 @@ flutter {
 }
 
 dependencies {
+    def appCenterSdkVersion = '4.1.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

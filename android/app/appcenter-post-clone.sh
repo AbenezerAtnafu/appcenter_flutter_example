@@ -14,6 +14,7 @@ git clone -b stable https://github.com/flutter/flutter.git
 export PATH=`pwd`/flutter/bin:$PATH
 
 flutter channel stable
+flutter upgrade
 flutter doctor
 flutter clean
 flutter build apk --release
