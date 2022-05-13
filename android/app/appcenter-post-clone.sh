@@ -15,6 +15,7 @@ export PATH=`pwd`/flutter/bin:$PATH
 
 flutter clean
 flutter channel stable
+flutter pub get
 flutter upgrade
 flutter doctor
 flutter build apk --release
