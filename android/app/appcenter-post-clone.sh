@@ -17,6 +17,7 @@ flutter channel stable
 flutter upgrade
 flutter doctor
 flutter clean
+rm -rf android/.gradle
 flutter build apk --release
 
 # copy the APK where AppCenter will find it
