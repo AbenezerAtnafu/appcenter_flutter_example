@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_appcenter_bundle/flutter_appcenter_bundle.dart';
+import 'package:appcenter_flutter/appcenter_flutter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,9 +12,6 @@ void initAppCenter() async {
     appSecretIOS: '27742f15-6e67-478d-bcbb-a7677af56b6f',
     enableAnalytics: true, // Defaults to true
     enableCrashes: true, // Defaults to true
-    enableDistribute: true, // Defaults to false
-    usePrivateDistributeTrack: false, // Defaults to false
-    disableAutomaticCheckForUpdate: false, // Defaults to false
   );
   
 }
