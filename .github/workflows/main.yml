@@ -18,9 +18,10 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: "12.x"
+          kotlin-version: "1.5.10"
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: "2.2.0"
+          flutter-version: "2.16.2"
       - run: flutter pub get
       - run: flutter test
       - run: flutter build apk --debug --split-per-abi
